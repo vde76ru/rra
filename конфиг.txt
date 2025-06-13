@@ -1,0 +1,37 @@
+server {
+	server_name systemetech.ru www.systemetech.ru;
+	charset off;
+	index index.php index.html;
+	disable_symlinks if_not_owner from=$root_path;
+	include /etc/nginx/vhosts-includes/*.conf;
+	include /etc/nginx/vhosts-resources/systemetech.ru/*.conf;
+	access_log /var/www/httpd-logs/systemetech.ru.access.log;
+	error_log /var/www/httpd-logs/systemetech.ru.error.log notice;
+	ssi on;
+	set $root_path /var/www/www-root/data/www/systemetech.ru;
+	root $root_path;
+	listen 79.133.183.86:80;
+	location / {
+		try_files $uri $uri/ /index.php?$args;
+		location ~ [^/]\.ph(p\d*|tml)$ {
+			try_files /does_not_exists @php;
+		}
+	}
+	location @php {
+		include /etc/nginx/vhosts-resources/systemetech.ru/dynamic/*.conf;
+		fastcgi_index index.php;
+		fastcgi_param PHP_ADMIN_VALUE "sendmail_path = /usr/sbin/sendmail -t -i -f webmaster@systemetech.ru";
+		fastcgi_pass unix:/var/www/php-fpm/3.sock;
+		fastcgi_split_path_info ^((?U).+\.ph(?:p\d*|tml))(/?.+)$;
+		try_files $uri =404;
+		include fastcgi_params;
+	}
+	location /bot/ {
+        proxy_pass http://localhost:8000/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
