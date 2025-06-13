@@ -1,0 +1,19 @@
+[Unit]
+Description=Crypto Trading Bot Web Interface
+After=network.target mysql.service redis.service
+
+[Service]
+Type=simple
+User=www-root
+Group=www-root
+WorkingDirectory=/var/www/www-root/data/www/systemetech.ru
+Environment="PATH=/var/www/www-root/data/www/systemetech.ru/venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/var/www/www-root/data/www/systemetech.ru"
+ExecStart=/var/www/www-root/data/www/systemetech.ru/venv/bin/python /var/www/www-root/data/www/systemetech.ru/app.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=append:/var/www/www-root/data/www/systemetech.ru/logs/web.log
+StandardError=append:/var/www/www-root/data/www/systemetech.ru/logs/web_error.log
+
+[Install]
+WantedBy=multi-user.target
