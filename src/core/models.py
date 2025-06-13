@@ -1,4 +1,9 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, Text, Enum
+"""
+Модели базы данных
+Путь: /var/www/www-root/data/www/systemetech.ru/src/core/models.py
+"""
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, Text, Enum, ForeignKey
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from .database import Base
 import enum
@@ -25,13 +30,14 @@ class Trade(Base):
     profit_percent = Column(Float, nullable=True)
     status = Column(Enum(TradeStatus), default=TradeStatus.OPEN, nullable=False)
     strategy = Column(String(50), nullable=False)
-    stop_loss = Column(Float, nullable=True)  # Добавлено
-    take_profit = Column(Float, nullable=True)  # Добавлено
+    stop_loss = Column(Float, nullable=True)
+    take_profit = Column(Float, nullable=True)
     trailing_stop = Column(Boolean, default=False)
     commission = Column(Float, default=0)
     notes = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     closed_at = Column(DateTime, nullable=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     
     def calculate_profit(self):
         """Расчет прибыли"""
@@ -59,17 +65,7 @@ class Signal(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     executed = Column(Boolean, default=False)
     executed_at = Column(DateTime, nullable=True)
-    trade_id = Column(Integer, nullable=True)  # Связь с Trade
-
-class Balance(Base):
-    __tablename__ = "balances"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    currency = Column(String(10), nullable=False)
-    total = Column(Float, nullable=False)
-    free = Column(Float, nullable=False)
-    used = Column(Float, nullable=False)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    trade_id = Column(Integer, ForeignKey('trades.id'), nullable=True)
 
 class User(Base):
     __tablename__ = "users"
@@ -85,15 +81,8 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     last_login = Column(DateTime, nullable=True)
     blocked_at = Column(DateTime, nullable=True)
-
-class BotSettings(Base):
-    __tablename__ = "bot_settings"
     
-    id = Column(Integer, primary_key=True, index=True)
-    key = Column(String(50), unique=True, index=True, nullable=False)
-    value = Column(Text, nullable=True)
-    description = Column(Text, nullable=True)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    trades = relationship("Trade", back_populates="user")
 
 class TradingPair(Base):
     __tablename__ = "trading_pairs"
@@ -120,4 +109,23 @@ class BotState(Base):
     profitable_trades = Column(Integer, default=0)
     total_profit = Column(Float, default=0)
     current_balance = Column(Float, default=0)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class Balance(Base):
+    __tablename__ = "balances"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    currency = Column(String(10), nullable=False)
+    total = Column(Float, nullable=False)
+    free = Column(Float, nullable=False)
+    used = Column(Float, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+class BotSettings(Base):
+    __tablename__ = "bot_settings"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    key = Column(String(50), unique=True, index=True, nullable=False)
+    value = Column(Text, nullable=True)
+    description = Column(Text, nullable=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -1,4 +1,7 @@
-"""Единая конфигурация системы"""
+"""
+Единая конфигурация системы
+Путь: /var/www/www-root/data/www/systemetech.ru/src/core/config.py
+"""
 import os
 from dataclasses import dataclass
 from typing import List
@@ -9,9 +12,9 @@ load_dotenv('/etc/crypto/config/.env')
 
 @dataclass
 class Config:
-    """Централизованная конфигурация"""
+    """Централизованная конфигурация всей системы"""
     
-    # API
+    # API Bybit
     BYBIT_API_KEY: str = os.getenv('BYBIT_API_KEY')
     BYBIT_API_SECRET: str = os.getenv('BYBIT_API_SECRET')
     BYBIT_TESTNET: bool = os.getenv('BYBIT_TESTNET', 'true').lower() == 'true'
@@ -26,6 +29,7 @@ class Config:
     # Торговля
     TRADING_PAIRS: List[str] = os.getenv('TRADING_PAIRS', 'BTCUSDT').split(',')
     MAX_POSITIONS: int = int(os.getenv('MAX_POSITIONS', '1'))
+    INITIAL_CAPITAL: float = float(os.getenv('INITIAL_CAPITAL', '1000'))
     MAX_POSITION_SIZE_PERCENT: float = float(os.getenv('MAX_POSITION_SIZE_PERCENT', '5'))
     STOP_LOSS_PERCENT: float = float(os.getenv('STOP_LOSS_PERCENT', '2'))
     TAKE_PROFIT_PERCENT: float = float(os.getenv('TAKE_PROFIT_PERCENT', '4'))
@@ -49,5 +53,10 @@ class Config:
     ENABLE_SCALPING: bool = os.getenv('ENABLE_SCALPING', 'true').lower() == 'true'
     MIN_RISK_REWARD_RATIO: float = float(os.getenv('MIN_RISK_REWARD_RATIO', '2.0'))
     MAX_DAILY_TRADES: int = int(os.getenv('MAX_DAILY_TRADES', '10'))
+    
+    # Redis
+    REDIS_HOST: str = os.getenv('REDIS_HOST', 'localhost')
+    REDIS_PORT: int = int(os.getenv('REDIS_PORT', '6379'))
 
+# Глобальный экземпляр конфигурации
 config = Config()
