@@ -1,0 +1,918 @@
+INFO:     Started server process [736981]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     147.45.111.86:57333 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     ('147.45.111.86', 57338) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" [accepted]
+INFO:     connection open
+INFO:     147.45.111.86:57333 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57333 - "POST /api/bot/start HTTP/1.1" 200 OK
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57333 - "GET /api/dashboard HTTP/1.1" 200 OK
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57334 - "GET /api/dashboard HTTP/1.1" 200 OK
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57355 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57360 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57363 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57367 - "GET /api/dashboard HTTP/1.1" 200 OK
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57372 - "GET /api/dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57396 - "GET /api/dashboard HTTP/1.1" 200 OK
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57404 - "GET /api/dashboard HTTP/1.1" 200 OK
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57419 - "GET /api/dashboard HTTP/1.1" 200 OK
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57433 - "GET /api/dashboard HTTP/1.1" 200 OK
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57440 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57457 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57493 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57510 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57532 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57544 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57545 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57635 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57657 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57686 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57693 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57706 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     147.45.111.86:57720 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57732 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57732 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     connection closed
+INFO:     147.45.111.86:57732 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57734) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57735) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57738) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57741) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57743) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57746) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+WebSocket error: received 1001 (going away); then sent 1001 (going away)
+INFO:     147.45.111.86:57733 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57747) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57750) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57751) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57757) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57758) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57759) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57760 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57761) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57762) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57763 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57763 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57764) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57763 - "POST /api/bot/start HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57766) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57769) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57770) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57771 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57772) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57776) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57777) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57782) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57785) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57786) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57787) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57788 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57788 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57788 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57789 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     ('147.45.111.86', 57790) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57789 - "POST /api/bot/start HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57789 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57789 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57791) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57789 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     147.45.111.86:57789 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57789 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57792) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57789 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     147.45.111.86:57789 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57789 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57794) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57789 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     147.45.111.86:57789 - "POST /api/bot/start HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57789 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57795) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57796) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57800) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57801) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57802) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57793 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57803) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57804) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57807) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57810) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57811) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57812) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57813 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57830) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57832) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57846 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57858) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57859 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57861) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57863 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     ('147.45.111.86', 57864) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57863 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57865) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57863 - "GET /dashboard HTTP/1.1" 200 OK
+INFO:     147.45.111.86:57863 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57862 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     ('147.45.111.86', 57866) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57862 - "POST /api/bot/start HTTP/1.1" 401 Unauthorized
+INFO:     147.45.111.86:57862 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57869) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57872) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57874) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57875) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57876) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57879 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57880) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57883) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57886) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57889) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57890) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57891) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57893 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57895) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57896) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57897) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57901) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57902) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     ('147.45.111.86', 57903) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57904 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     ('147.45.111.86', 57908) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57910 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:780: RuntimeWarning: invalid value encountered in scalar divide
+  dip[idx] = 100 * (self._dip[idx] / value)
+/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/ta/trend.py:785: RuntimeWarning: invalid value encountered in scalar divide
+  din[idx] = 100 * (self._din[idx] / value)
+INFO:     ('147.45.111.86', 57924) - "WebSocket /ws?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJXYXlTZW5DcnlwdG9Ub3AiLCJleHAiOjE3NDk4MjE3Mzl9.02EfdpmHkz-mmMGMD72o_qf8EEEt3nNzNmnHmFWdsSI" 403
+INFO:     connection rejected (403 Forbidden)
+INFO:     connection closed
+INFO:     147.45.111.86:57925 - "GET /api/dashboard HTTP/1.1" 401 Unauthorized
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [736981]
