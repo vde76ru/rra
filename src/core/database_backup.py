@@ -1,10 +1,15 @@
-"""Подключение к базе данных"""
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from .config import config
+from dotenv import load_dotenv
 
-engine = create_engine(config.DATABASE_URL, pool_pre_ping=True)
+load_dotenv()
+
+# Подключение к MySQL
+DATABASE_URL = f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}"
+
+engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

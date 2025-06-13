@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 """
-Crypto Trading Bot - Main Entry Point
-Исправленная версия с правильной обработкой остановки
+Crypto Trading Bot v3.0 - Единая точка входа
 """
-
 import asyncio
-import os
+import argparse
 import logging
 import signal
 import sys
-from dotenv import load_dotenv
+from pathlib import Path
+
+# Добавляем корневую директорию в путь
+sys.path.append(str(Path(__file__).parent))
+
+from src.core.config import config
+from src.bot.manager import bot_manager
 
 # Настройка логирования
 logging.basicConfig(
@@ -22,139 +26,99 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Загружаем конфигурацию
-load_dotenv()
-
-# Импортируем менеджер бота
-from src.core.bot_manager import bot_manager
-
-class CryptoTradingBot:
-    """Главный класс торгового бота с улучшенной обработкой остановки"""
+async def run_bot():
+    """Запуск торгового бота"""
+    logger.info("🚀 Запуск торгового бота...")
     
-    def __init__(self):
-        self.bot_manager = bot_manager
-        self.shutdown_event = asyncio.Event()
-        self._shutdown_requested = False  # ✅ Добавляем флаг
-        
-    async def run(self):
-        """Запуск бота с правильной обработкой остановки"""
-        logger.info("=" * 50)
-        logger.info("🤖 Crypto Trading Bot v3.0")
-        logger.info("=" * 50)
-        
-        # Настройка обработчиков сигналов
-        for sig in (signal.SIGTERM, signal.SIGINT):
-            signal.signal(sig, self._signal_handler)
-        
-        try:
-            # ✅ ИСПРАВЛЕНИЕ: Запускаем бота и мониторинг параллельно
-            logger.info("🚀 Запуск торгового бота...")
-            
-            # Создаем задачи
-            bot_task = asyncio.create_task(self._run_bot_safely())
-            monitor_task = asyncio.create_task(self._monitor_shutdown())
-            
-            # Ждем завершения любой из задач
-            done, pending = await asyncio.wait(
-                [bot_task, monitor_task],
-                return_when=asyncio.FIRST_COMPLETED
-            )
-            
-            # Отменяем оставшиеся задачи
-            for task in pending:
-                task.cancel()
-                try:
-                    await task
-                except asyncio.CancelledError:
-                    pass
-            
-        except KeyboardInterrupt:
-            logger.info("⚠️ Получен KeyboardInterrupt")
-        except Exception as e:
-            logger.error(f"❌ Критическая ошибка: {e}")
-        finally:
-            # ✅ ИСПРАВЛЕНИЕ: Быстрая остановка с таймаутом
-            await self._shutdown_with_timeout()
+    # Обработка сигналов
+    stop_event = asyncio.Event()
     
-    async def _run_bot_safely(self):
-        """Безопасный запуск бота с обработкой ошибок"""
-        try:
-            await self.bot_manager.start()
-            
-            # Ждем сигнала остановки через короткие интервалы
-            while not self._shutdown_requested:
-                await asyncio.sleep(1)  # ✅ Проверяем каждую секунду
-                
-        except Exception as e:
-            logger.error(f"❌ Ошибка в боте: {e}")
-            self._shutdown_requested = True
+    def signal_handler(sig, frame):
+        logger.info(f"📡 Получен сигнал {sig}")
+        stop_event.set()
     
-    async def _monitor_shutdown(self):
-        """Мониторинг сигнала остановки"""
-        await self.shutdown_event.wait()
-        logger.info("🛑 Получен сигнал остановки, инициируем shutdown...")
-        self._shutdown_requested = True
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
     
-    async def _shutdown_with_timeout(self):
-        """Остановка бота с таймаутом"""
-        logger.info("🛑 Остановка бота...")
-        
-        try:
-            # ✅ Устанавливаем таймаут на остановку (максимум 10 секунд)
-            await asyncio.wait_for(
-                self.bot_manager.stop(),
-                timeout=10.0
-            )
-            logger.info("✅ Бот остановлен корректно")
-            
-        except asyncio.TimeoutError:
-            logger.warning("⚠️ Таймаут остановки бота (10 секунд)")
-            logger.info("🔧 Принудительное завершение...")
-            
-        except Exception as e:
-            logger.error(f"❌ Ошибка при остановке: {e}")
-        
-        finally:
-            logger.info("👋 Завершение программы")
-    
-    def _signal_handler(self, signum, frame):
-        """Улучшенный обработчик сигналов"""
-        if self._shutdown_requested:
-            # ✅ Если уже получили сигнал, принудительно завершаем
-            logger.warning(f"⚠️ Повторный сигнал {signum}, принудительное завершение!")
-            sys.exit(1)
-        
-        logger.info(f"📡 Получен сигнал {signum}, инициируем graceful shutdown...")
-        self._shutdown_requested = True
-        self.shutdown_event.set()
-
-async def main():
-    """Точка входа с улучшенной инициализацией"""
-    # Проверяем необходимые директории
-    os.makedirs('logs', exist_ok=True)
-    os.makedirs('data/cache', exist_ok=True)
-    os.makedirs('data/backups', exist_ok=True)
-    
-    # Проверяем конфигурацию
-    if not os.getenv('BYBIT_API_KEY') or os.getenv('BYBIT_API_KEY') == 'your_testnet_api_key_here':
-        logger.error("❌ API ключи не настроены!")
-        logger.error("Используйте: sudo python add_api_keys.py")
-        sys.exit(1)
-    
-    # Создаем и запускаем бота
-    bot = CryptoTradingBot()
-    await bot.run()
-
-if __name__ == "__main__":
     try:
-        # ✅ Устанавливаем политику событий для Windows
-        if sys.platform.startswith('win'):
-            asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
-            
-        asyncio.run(main())
+        # Запускаем бота
+        success, message = await bot_manager.start()
+        if not success:
+            logger.error(f"❌ Не удалось запустить бота: {message}")
+            return
         
-    except KeyboardInterrupt:
-        logger.info("👋 Программа прервана пользователем")
+        # Ждем сигнала остановки
+        await stop_event.wait()
+        
     except Exception as e:
         logger.error(f"💥 Критическая ошибка: {e}")
+    finally:
+        # Останавливаем бота
+        logger.info("🛑 Остановка бота...")
+        await bot_manager.stop()
+
+def run_web():
+    """Запуск веб-интерфейса"""
+    logger.info("🌐 Запуск веб-интерфейса...")
+    
+    import uvicorn
+    from src.web.app import app
+    
+    uvicorn.run(
+        app,
+        host=config.WEB_HOST,
+        port=config.WEB_PORT,
+        log_level="info"
+    )
+
+async def run_all():
+    """Запуск всей системы"""
+    logger.info("🚀 Запуск полной системы...")
+    
+    # Запускаем бота в фоне
+    bot_task = asyncio.create_task(run_bot())
+    
+    # Запускаем веб в отдельном процессе
+    import multiprocessing
+    web_process = multiprocessing.Process(target=run_web)
+    web_process.start()
+    
+    try:
+        await bot_task
+    finally:
+        web_process.terminate()
+        web_process.join()
+
+def main():
+    """Главная функция"""
+    parser = argparse.ArgumentParser(description='Crypto Trading Bot v3.0')
+    parser.add_argument(
+        '--mode',
+        choices=['bot', 'web', 'all'],
+        default='all',
+        help='Режим запуска: bot (только бот), web (только веб), all (всё)'
+    )
+    
+    args = parser.parse_args()
+    
+    # Создаем директории
+    Path('logs').mkdir(exist_ok=True)
+    Path('data/cache').mkdir(parents=True, exist_ok=True)
+    Path('data/backups').mkdir(parents=True, exist_ok=True)
+    
+    # Проверяем конфигурацию
+    if not config.BYBIT_API_KEY or config.BYBIT_API_KEY == 'your_testnet_api_key_here':
+        logger.error("❌ API ключи не настроены!")
+        logger.info("📝 Настройте их в /etc/crypto/config/.env")
         sys.exit(1)
+    
+    # Запускаем
+    if args.mode == 'bot':
+        asyncio.run(run_bot())
+    elif args.mode == 'web':
+        run_web()
+    else:
+        asyncio.run(run_all())
+
+if __name__ == "__main__":
+    main()
