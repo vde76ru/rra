@@ -32,3 +32,20 @@ WEB_PORT=8000
 # Telegram уведомления
 TELEGRAM_BOT_TOKEN=7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8
 TELEGRAM_CHAT_ID=-4889364288
+
+# Безопасность
+SECRET_KEY=your-very-long-random-secret-key-change-this-in-production
+
+# Торговые пары (через запятую)
+TRADING_PAIRS=BTCUSDT,ETHUSDT,BNBUSDT,SOLUSDT
+
+# Максимум открытых позиций
+MAX_POSITIONS=1
+
+# Стратегии
+ENABLE_MULTI_INDICATOR=true
+ENABLE_SCALPING=true
+
+# Риск менеджмент
+MIN_RISK_REWARD_RATIO=2.0
+MAX_DAILY_TRADES=10
