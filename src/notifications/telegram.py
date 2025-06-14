@@ -4,9 +4,10 @@ Telegram уведомления
 """
 import os
 import asyncio
+import sys
 import logging
 from datetime import datetime, timedelta
-from typing import Optional, List
+from typing import Dict, Any, List, Optional, Tuple
 import aiohttp
 
 from ..core.config import config
@@ -23,12 +24,15 @@ class TelegramNotifier:
         
         if not self.enabled:
             logger.warning("⚠️ Telegram уведомления отключены (не настроены токен или chat_id)")
+        else:
+            logger.info(f"✅ Telegram уведомления включены для чата {self.chat_id}")
         
         self.base_url = f"https://api.telegram.org/bot{self.bot_token}"
         
     async def send_message(self, text: str, parse_mode: str = 'HTML', disable_notification: bool = False):
         """Отправка сообщения"""
         if not self.enabled:
+            logger.debug("Telegram уведомления отключены, сообщение не отправлено")
             return
         
         try:
@@ -45,6 +49,8 @@ class TelegramNotifier:
                     if response.status != 200:
                         error_text = await response.text()
                         logger.error(f"❌ Ошибка отправки в Telegram: {error_text}")
+                    else:
+                        logger.debug("✅ Сообщение отправлено в Telegram")
                     
         except Exception as e:
             logger.error(f"❌ Ошибка отправки в Telegram: {e}")
@@ -136,9 +142,12 @@ class TelegramNotifier:
     
     async def send_error(self, error: str):
         """Уведомление об ошибке"""
-        # Ограничиваем длину сообщения
+        # Ограничиваем длину сообщения и экранируем HTML
         if len(error) > 500:
             error = error[:497] + "..."
+        
+        # Экранируем специальные символы HTML
+        error = error.replace('<', '&lt;').replace('>', '&gt;').replace('&', '&amp;')
         
         text = f"""🚨 <b>Ошибка</b>
         
@@ -157,6 +166,26 @@ class TelegramNotifier:
 ⏰ Время: {datetime.now().strftime('%H:%M:%S')}"""
         
         await self.send_message(text, disable_notification=True)
+    
+    async def test_connection(self):
+        """Тест подключения к Telegram"""
+        if not self.enabled:
+            return False, "Telegram не настроен"
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                url = f"{self.base_url}/getMe"
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        bot_name = data.get('result', {}).get('username', 'Unknown')
+                        await self.send_message(f"✅ Тестовое сообщение от бота @{bot_name}")
+                        return True, f"Подключен к боту @{bot_name}"
+                    else:
+                        error = await response.text()
+                        return False, f"Ошибка API: {error}"
+        except Exception as e:
+            return False, f"Ошибка подключения: {str(e)}"
 
 # Глобальный экземпляр
 telegram_notifier = TelegramNotifier()

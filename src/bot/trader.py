@@ -3,7 +3,7 @@
 Путь: /var/www/www-root/data/www/systemetech.ru/src/bot/trader.py
 """
 import logging
-from typing import Optional, Dict
+from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime
 
 from ..core.models import Trade, Signal, OrderSide, TradeStatus

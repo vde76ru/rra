@@ -4,7 +4,7 @@
 """
 import logging
 import pandas as pd
-from typing import Dict, List, Optional
+from typing import Dict, Any, List, Optional, Tuple, Dict, List, Optional
 from datetime import datetime, timedelta
 
 from ..exchange.client import exchange_client

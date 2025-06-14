@@ -3,7 +3,7 @@
 Путь: /var/www/www-root/data/www/systemetech.ru/src/strategies/base.py
 """
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional
+from typing import Dict, Any, List, Optional, Tuple, Dict, Any, Optional
 import pandas as pd
 from dataclasses import dataclass
 

@@ -39,6 +39,9 @@ class Trade(Base):
     closed_at = Column(DateTime, nullable=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
     
+    # Добавляем связь с User
+    user = relationship("User", back_populates="trades")
+    
     def calculate_profit(self):
         """Расчет прибыли"""
         if self.exit_price and self.entry_price:

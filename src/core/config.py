@@ -1,62 +1,91 @@
 """
 Единая конфигурация системы
-Путь: /var/www/www-root/data/www/systemetech.ru/src/core/config.py
+Загружает все настройки из .env файла
 """
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List
 from dotenv import load_dotenv
 
-# Загружаем переменные окружения
-load_dotenv('/etc/crypto/config/.env')
+# Загружаем .env файл - приоритет системному пути
+if os.path.exists('/etc/crypto/config/.env'):
+    load_dotenv('/etc/crypto/config/.env')
+    print("✅ Загружена конфигурация из /etc/crypto/config/.env")
+elif os.path.exists('.env'):
+    load_dotenv('.env')
+    print("✅ Загружена конфигурация из .env")
+else:
+    print("⚠️ Файл .env не найден!")
 
 @dataclass
 class Config:
-    """Централизованная конфигурация всей системы"""
+    """Конфигурация приложения"""
     
-    # API Bybit
-    BYBIT_API_KEY: str = os.getenv('BYBIT_API_KEY')
-    BYBIT_API_SECRET: str = os.getenv('BYBIT_API_SECRET')
-    BYBIT_TESTNET: bool = os.getenv('BYBIT_TESTNET', 'true').lower() == 'true'
+    # API настройки
+    BYBIT_API_KEY: str = field(default_factory=lambda: os.getenv('BYBIT_API_KEY', ''))
+    BYBIT_API_SECRET: str = field(default_factory=lambda: os.getenv('BYBIT_API_SECRET', ''))
+    BYBIT_TESTNET: bool = field(default_factory=lambda: os.getenv('BYBIT_TESTNET', 'true').lower() == 'true')
     
     # База данных
-    DB_HOST: str = os.getenv('DB_HOST', 'localhost')
-    DB_NAME: str = os.getenv('DB_NAME', 'crypto_top_bd_mysql')
-    DB_USER: str = os.getenv('DB_USER', 'crypto_top_admin')
-    DB_PASSWORD: str = os.getenv('DB_PASSWORD')
-    DATABASE_URL: str = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    DB_HOST: str = field(default_factory=lambda: os.getenv('DB_HOST', 'localhost'))
+    DB_NAME: str = field(default_factory=lambda: os.getenv('DB_NAME', 'crypto_top_bd_mysql'))
+    DB_USER: str = field(default_factory=lambda: os.getenv('DB_USER', 'crypto_top_admin'))
+    DB_PASSWORD: str = field(default_factory=lambda: os.getenv('DB_PASSWORD', ''))
     
-    # Торговля
-    TRADING_PAIRS: List[str] = os.getenv('TRADING_PAIRS', 'BTCUSDT').split(',')
-    MAX_POSITIONS: int = int(os.getenv('MAX_POSITIONS', '1'))
-    INITIAL_CAPITAL: float = float(os.getenv('INITIAL_CAPITAL', '1000'))
-    MAX_POSITION_SIZE_PERCENT: float = float(os.getenv('MAX_POSITION_SIZE_PERCENT', '5'))
-    STOP_LOSS_PERCENT: float = float(os.getenv('STOP_LOSS_PERCENT', '2'))
-    TAKE_PROFIT_PERCENT: float = float(os.getenv('TAKE_PROFIT_PERCENT', '4'))
-    
-    # Human behavior
-    ENABLE_HUMAN_MODE: bool = os.getenv('ENABLE_HUMAN_MODE', 'true').lower() == 'true'
-    MIN_DELAY_SECONDS: float = float(os.getenv('MIN_DELAY_SECONDS', '0.5'))
-    MAX_DELAY_SECONDS: float = float(os.getenv('MAX_DELAY_SECONDS', '3.0'))
-    
-    # Telegram
-    TELEGRAM_BOT_TOKEN: str = os.getenv('TELEGRAM_BOT_TOKEN')
-    TELEGRAM_CHAT_ID: str = os.getenv('TELEGRAM_CHAT_ID')
-    
-    # Web
-    WEB_HOST: str = os.getenv('WEB_HOST', '0.0.0.0')
-    WEB_PORT: int = int(os.getenv('WEB_PORT', '8000'))
-    SECRET_KEY: str = os.getenv('SECRET_KEY', 'change-this-in-production')
-    
-    # Стратегии
-    ENABLE_MULTI_INDICATOR: bool = os.getenv('ENABLE_MULTI_INDICATOR', 'true').lower() == 'true'
-    ENABLE_SCALPING: bool = os.getenv('ENABLE_SCALPING', 'true').lower() == 'true'
-    MIN_RISK_REWARD_RATIO: float = float(os.getenv('MIN_RISK_REWARD_RATIO', '2.0'))
-    MAX_DAILY_TRADES: int = int(os.getenv('MAX_DAILY_TRADES', '10'))
+    @property
+    def DATABASE_URL(self) -> str:
+        return f"mysql+pymysql://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}/{self.DB_NAME}"
     
     # Redis
-    REDIS_HOST: str = os.getenv('REDIS_HOST', 'localhost')
-    REDIS_PORT: int = int(os.getenv('REDIS_PORT', '6379'))
+    REDIS_HOST: str = field(default_factory=lambda: os.getenv('REDIS_HOST', 'localhost'))
+    REDIS_PORT: int = field(default_factory=lambda: int(os.getenv('REDIS_PORT', '6379')))
+    
+    # Торговые параметры
+    TRADING_SYMBOL: str = field(default_factory=lambda: os.getenv('TRADING_SYMBOL', 'BTCUSDT'))
+    TRADING_PAIRS: List[str] = field(default_factory=lambda: os.getenv('TRADING_PAIRS', 'BTCUSDT,ETHUSDT,BNBUSDT,SOLUSDT').split(','))
+    INITIAL_CAPITAL: float = field(default_factory=lambda: float(os.getenv('INITIAL_CAPITAL', '1000')))
+    MAX_POSITIONS: int = field(default_factory=lambda: int(os.getenv('MAX_POSITIONS', '1')))
+    MAX_POSITION_SIZE_PERCENT: float = field(default_factory=lambda: float(os.getenv('MAX_POSITION_SIZE_PERCENT', '5')))
+    STOP_LOSS_PERCENT: float = field(default_factory=lambda: float(os.getenv('STOP_LOSS_PERCENT', '2')))
+    TAKE_PROFIT_PERCENT: float = field(default_factory=lambda: float(os.getenv('TAKE_PROFIT_PERCENT', '4')))
+    
+    # Human behavior
+    ENABLE_HUMAN_MODE: bool = field(default_factory=lambda: os.getenv('ENABLE_HUMAN_MODE', 'true').lower() == 'true')
+    MIN_DELAY_SECONDS: float = field(default_factory=lambda: float(os.getenv('MIN_DELAY_SECONDS', '0.5')))
+    MAX_DELAY_SECONDS: float = field(default_factory=lambda: float(os.getenv('MAX_DELAY_SECONDS', '3.0')))
+    
+    # Веб-интерфейс
+    WEB_HOST: str = field(default_factory=lambda: os.getenv('WEB_HOST', '0.0.0.0'))
+    WEB_PORT: int = field(default_factory=lambda: int(os.getenv('WEB_PORT', '8000')))
+    
+    # Telegram
+    TELEGRAM_BOT_TOKEN: str = field(default_factory=lambda: os.getenv('TELEGRAM_BOT_TOKEN', ''))
+    TELEGRAM_CHAT_ID: str = field(default_factory=lambda: os.getenv('TELEGRAM_CHAT_ID', ''))
+    
+    # Безопасность
+    SECRET_KEY: str = field(default_factory=lambda: os.getenv('SECRET_KEY', 'your-very-long-random-secret-key-change-this-in-production'))
+    
+    # Стратегии
+    ENABLE_MULTI_INDICATOR: bool = field(default_factory=lambda: os.getenv('ENABLE_MULTI_INDICATOR', 'true').lower() == 'true')
+    ENABLE_SCALPING: bool = field(default_factory=lambda: os.getenv('ENABLE_SCALPING', 'true').lower() == 'true')
+    
+    # Риск менеджмент
+    MIN_RISK_REWARD_RATIO: float = field(default_factory=lambda: float(os.getenv('MIN_RISK_REWARD_RATIO', '2.0')))
+    MAX_DAILY_TRADES: int = field(default_factory=lambda: int(os.getenv('MAX_DAILY_TRADES', '10')))
+    
+    def validate(self) -> tuple[bool, list[str]]:
+        """Валидация конфигурации"""
+        errors = []
+        
+        if not self.BYBIT_API_KEY:
+            errors.append("BYBIT_API_KEY не установлен")
+        if not self.BYBIT_API_SECRET:
+            errors.append("BYBIT_API_SECRET не установлен")
+        if not self.DB_PASSWORD:
+            errors.append("DB_PASSWORD не установлен")
+        
+        return len(errors) == 0, errors
 
 # Глобальный экземпляр конфигурации
 config = Config()

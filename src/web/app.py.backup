@@ -1,49 +1,12 @@
 """
 Веб-интерфейс для Crypto Trading Bot - ИСПРАВЛЕННАЯ ВЕРСИЯ
+Путь: src/web/app.py
 """
 from fastapi import FastAPI, Depends, HTTPException, WebSocket, status
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from typing import List, Dict, Any
-import logging
-
-# Импорты компонентов системы
-from ..core.database import get_db, SessionLocal
-from ..core.models import User, Trade, Signal, TradingPair
-
-# Условные импорты
-try:
-    from ..bot.manager import bot_manager
-    BOT_MANAGER_AVAILABLE = True
-except ImportError as e:
-    print(f"⚠️ Не удалось импортировать bot_manager: {e}")
-    BOT_MANAGER_AVAILABLE = False
-    bot_manager = None
-
-try:
-    from .auth import get_current_user, create_access_token, auth_service
-    AUTH_AVAILABLE = True
-except ImportError as e:
-    print(f"⚠️ Не удалось импортировать модуль аутентификации: {e}")
-    AUTH_AVAILABLE = False
-
-try:
-    from .websocket import websocket_endpoint
-    WEBSOCKET_AVAILABLE = True
-except ImportError as e:
-    print(f"⚠️ Не удалось импортировать WebSocket: {e}")
-    WEBSOCKET_AVAILABLE = False
-
-try:
-    from .dashboard import get_dashboard_html
-    DASHBOARD_AVAILABLE = True
-except ImportError as e:
-    print(f"⚠️ Не удалось импортировать дашборд: {e}")
-    DASHBOARD_AVAILABLE = False
-
-logger = logging.getLogger(__name__)
 from typing import List, Dict, Any
 import logging
 

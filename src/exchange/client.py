@@ -4,9 +4,10 @@
 """
 import ccxt
 import asyncio
+import sys
 import random
 import logging
-from typing import Dict, Optional, List
+from typing import Dict, Any, List, Optional, Tuple, Dict, Optional, List
 from datetime import datetime
 
 from ..core.config import config

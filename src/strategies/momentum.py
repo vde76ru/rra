@@ -4,10 +4,12 @@ Momentum стратегия
 """
 import pandas as pd
 import numpy as np
+from typing import Dict  # ✅ ИСПРАВЛЕНО: добавлен импорт Dict
 from ta.momentum import RSIIndicator, ROCIndicator
 from ta.trend import EMAIndicator
 from ta.volatility import AverageTrueRange
 import logging
+from typing import Dict
 
 from .base import BaseStrategy, TradingSignal
 
@@ -15,9 +17,17 @@ logger = logging.getLogger(__name__)
 
 class MomentumStrategy(BaseStrategy):
     """
-    Простая momentum стратегия
-    Торгует по направлению сильного движения
+    Улучшенная momentum стратегия
+    Торгует по направлению сильного движения с защитой от ошибок
     """
+    
+    # ✅ УЛУЧШЕНИЕ: Константы вместо магических чисел
+    PRICE_CHANGE_THRESHOLD_5D = 1.0
+    PRICE_CHANGE_THRESHOLD_10D = 2.0
+    ROC_BULLISH_THRESHOLD = 2.0
+    ROC_BEARISH_THRESHOLD = -2.0
+    VOLUME_RATIO_THRESHOLD = 1.5
+    RSI_NEUTRAL = 50
     
     def __init__(self):
         super().__init__("momentum")
@@ -28,7 +38,7 @@ class MomentumStrategy(BaseStrategy):
         self.min_momentum_score = 0.6
         
     async def analyze(self, df: pd.DataFrame, symbol: str) -> TradingSignal:
-        """Анализ momentum"""
+        """Анализ momentum с улучшенной обработкой ошибок"""
         
         if not self.validate_dataframe(df):
             return TradingSignal('WAIT', 0, 0, reason='Недостаточно данных')
@@ -36,6 +46,10 @@ class MomentumStrategy(BaseStrategy):
         try:
             # Рассчитываем индикаторы
             indicators = self._calculate_indicators(df)
+            
+            # Проверяем корректность данных
+            if not indicators:
+                return TradingSignal('WAIT', 0, 0, reason='Ошибка расчета индикаторов')
             
             # Анализируем momentum
             momentum_score = self._analyze_momentum(indicators)
@@ -48,37 +62,64 @@ class MomentumStrategy(BaseStrategy):
             return TradingSignal('WAIT', 0, 0, reason=f'Ошибка анализа: {e}')
     
     def _calculate_indicators(self, df: pd.DataFrame) -> Dict:
-        """Расчет индикаторов momentum"""
+        """Расчет индикаторов momentum с защитой от ошибок"""
         indicators = {}
         
-        # RSI
-        rsi = RSIIndicator(df['close'], window=self.rsi_period)
-        indicators['rsi'] = rsi.rsi().iloc[-1]
-        indicators['rsi_prev'] = rsi.rsi().iloc[-2]
-        
-        # EMA
-        indicators['ema_fast'] = EMAIndicator(df['close'], window=self.ema_fast).ema_indicator().iloc[-1]
-        indicators['ema_slow'] = EMAIndicator(df['close'], window=self.ema_slow).ema_indicator().iloc[-1]
-        
-        # Rate of Change
-        roc = ROCIndicator(df['close'], window=self.roc_period)
-        indicators['roc'] = roc.roc().iloc[-1]
-        
-        # Price momentum
-        indicators['price_change_5'] = ((df['close'].iloc[-1] - df['close'].iloc[-6]) / df['close'].iloc[-6]) * 100
-        indicators['price_change_10'] = ((df['close'].iloc[-1] - df['close'].iloc[-11]) / df['close'].iloc[-11]) * 100
-        
-        # Volume momentum
-        indicators['volume_ratio'] = df['volume'].iloc[-1] / df['volume'].rolling(window=20).mean().iloc[-1]
-        
-        # ATR для volatility
-        atr = AverageTrueRange(df['high'], df['low'], df['close'])
-        indicators['atr'] = atr.average_true_range().iloc[-1]
-        
-        # Текущая цена
-        indicators['current_price'] = df['close'].iloc[-1]
-        
-        return indicators
+        try:
+            # ✅ УЛУЧШЕНИЕ: Проверка достаточности данных
+            if len(df) < max(self.rsi_period, self.ema_slow, self.roc_period):
+                logger.warning("Недостаточно данных для расчета всех индикаторов")
+                return {}
+            
+            # RSI
+            rsi = RSIIndicator(df['close'], window=self.rsi_period)
+            rsi_values = rsi.rsi()
+            indicators['rsi'] = rsi_values.iloc[-1] if not rsi_values.empty else self.RSI_NEUTRAL
+            indicators['rsi_prev'] = rsi_values.iloc[-2] if len(rsi_values) > 1 else self.RSI_NEUTRAL
+            
+            # EMA
+            ema_fast_values = EMAIndicator(df['close'], window=self.ema_fast).ema_indicator()
+            ema_slow_values = EMAIndicator(df['close'], window=self.ema_slow).ema_indicator()
+            indicators['ema_fast'] = ema_fast_values.iloc[-1]
+            indicators['ema_slow'] = ema_slow_values.iloc[-1]
+            
+            # Rate of Change
+            roc = ROCIndicator(df['close'], window=self.roc_period)
+            indicators['roc'] = roc.roc().iloc[-1]
+            
+            # Price momentum с защитой от выхода за границы
+            indicators['price_change_5'] = self._safe_price_change(df, 6)
+            indicators['price_change_10'] = self._safe_price_change(df, 11)
+            
+            # Volume momentum
+            volume_mean = df['volume'].rolling(window=20).mean()
+            indicators['volume_ratio'] = (df['volume'].iloc[-1] / volume_mean.iloc[-1] 
+                                       if volume_mean.iloc[-1] > 0 else 1.0)
+            
+            # ATR для volatility
+            atr = AverageTrueRange(df['high'], df['low'], df['close'])
+            indicators['atr'] = atr.average_true_range().iloc[-1]
+            
+            # Текущая цена
+            indicators['current_price'] = df['close'].iloc[-1]
+            
+            return indicators
+            
+        except Exception as e:
+            logger.error(f"Ошибка расчета индикаторов: {e}")
+            return {}
+    
+    def _safe_price_change(self, df: pd.DataFrame, periods: int) -> float:
+        """✅ НОВОЕ: Безопасный расчет изменения цены"""
+        try:
+            if len(df) >= periods:
+                current_price = df['close'].iloc[-1]
+                past_price = df['close'].iloc[-periods]
+                return ((current_price - past_price) / past_price) * 100
+            else:
+                return 0.0
+        except (IndexError, ZeroDivisionError):
+            return 0.0
     
     def _analyze_momentum(self, indicators: Dict) -> Dict:
         """Анализ силы momentum"""
@@ -92,10 +133,10 @@ class MomentumStrategy(BaseStrategy):
         bearish_score = 0
         
         # RSI momentum
-        if indicators['rsi'] > 50 and indicators['rsi'] > indicators['rsi_prev']:
+        if indicators['rsi'] > self.RSI_NEUTRAL and indicators['rsi'] > indicators['rsi_prev']:
             bullish_score += 0.2
             momentum_score['components'].append('RSI восходящий')
-        elif indicators['rsi'] < 50 and indicators['rsi'] < indicators['rsi_prev']:
+        elif indicators['rsi'] < self.RSI_NEUTRAL and indicators['rsi'] < indicators['rsi_prev']:
             bearish_score += 0.2
             momentum_score['components'].append('RSI нисходящий')
         
@@ -108,23 +149,25 @@ class MomentumStrategy(BaseStrategy):
             momentum_score['components'].append('EMA медвежий крест')
         
         # Price momentum
-        if indicators['price_change_5'] > 1 and indicators['price_change_10'] > 2:
+        if (indicators['price_change_5'] > self.PRICE_CHANGE_THRESHOLD_5D and 
+            indicators['price_change_10'] > self.PRICE_CHANGE_THRESHOLD_10D):
             bullish_score += 0.3
             momentum_score['components'].append(f"Рост цены {indicators['price_change_5']:.1f}%")
-        elif indicators['price_change_5'] < -1 and indicators['price_change_10'] < -2:
+        elif (indicators['price_change_5'] < -self.PRICE_CHANGE_THRESHOLD_5D and 
+              indicators['price_change_10'] < -self.PRICE_CHANGE_THRESHOLD_10D):
             bearish_score += 0.3
             momentum_score['components'].append(f"Падение цены {indicators['price_change_5']:.1f}%")
         
         # ROC momentum
-        if indicators['roc'] > 2:
+        if indicators['roc'] > self.ROC_BULLISH_THRESHOLD:
             bullish_score += 0.15
             momentum_score['components'].append('Сильный ROC')
-        elif indicators['roc'] < -2:
+        elif indicators['roc'] < self.ROC_BEARISH_THRESHOLD:
             bearish_score += 0.15
             momentum_score['components'].append('Слабый ROC')
         
         # Volume confirmation
-        if indicators['volume_ratio'] > 1.5:
+        if indicators['volume_ratio'] > self.VOLUME_RATIO_THRESHOLD:
             if bullish_score > bearish_score:
                 bullish_score += 0.1
             else:

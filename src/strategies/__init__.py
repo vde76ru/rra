@@ -1,28 +1,20 @@
-"""Фабрика стратегий"""
-from typing import Dict, Type
-from .base import BaseStrategy
-from .momentum import MomentumStrategy
-from .multi_indicator import MultiIndicatorStrategy
-from .scalping import ScalpingStrategy
+"""
+Инициализация модуля стратегий
+Путь: src/strategies/__init__.py
+"""
+from .factory import StrategyFactory, strategy_factory
+from .base import BaseStrategy, TradingSignal
 
-class StrategyFactory:
-    """Фабрика для создания стратегий"""
-    
-    _strategies: Dict[str, Type[BaseStrategy]] = {
-        'momentum': MomentumStrategy,
-        'multi_indicator': MultiIndicatorStrategy,
-        'scalping': ScalpingStrategy
-    }
-    
-    @classmethod
-    def create(cls, name: str) -> BaseStrategy:
-        """Создать стратегию по имени"""
-        strategy_class = cls._strategies.get(name)
-        if not strategy_class:
-            raise ValueError(f"Неизвестная стратегия: {name}")
-        return strategy_class()
-    
-    @classmethod
-    def list_strategies(cls) -> list:
-        """Список доступных стратегий"""
-        return list(cls._strategies.keys())
+# Экспортируем основные классы
+__all__ = [
+    'StrategyFactory',
+    'strategy_factory', 
+    'BaseStrategy',
+    'TradingSignal'
+]
+
+# Информация о модуле
+__version__ = '1.0.0'
+__author__ = 'Crypto Trading Bot'
+
+print(f"📦 Модуль стратегий инициализирован (версия {__version__})")

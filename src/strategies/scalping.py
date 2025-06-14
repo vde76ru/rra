@@ -8,6 +8,7 @@ from ta.momentum import RSIIndicator
 from ta.volatility import BollingerBands, AverageTrueRange
 from ta.volume import VolumeWeightedAveragePrice
 import logging
+from typing import Dict
 
 from .base import BaseStrategy, TradingSignal
 

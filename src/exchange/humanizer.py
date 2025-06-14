@@ -1,10 +1,13 @@
 """
-Миксин для имитации человеческого поведения
-Путь: /var/www/www-root/data/www/systemetech.ru/src/exchange/humanizer.py
+Модуль для имитации человеческого поведения при торговле
+Защита от обнаружения ботов
 """
-import random
 import asyncio
+import sys
+import random
+import time
 import logging
+from typing import Dict, Any, List, Optional, Tuple
 from datetime import datetime, timedelta
 
 from ..core.config import config
@@ -12,169 +15,224 @@ from ..core.config import config
 logger = logging.getLogger(__name__)
 
 class HumanBehaviorMixin:
-    """
-    Поведение для имитации человека
-    Делает торговлю более естественной
-    """
+    """Миксин для добавления человеческого поведения"""
     
     def _init_human_behavior(self):
-        """Инициализация параметров поведения"""
-        self.last_action_time = datetime.now()
+        """Инициализация параметров человеческого поведения"""
+        self.enable_human_mode = config.ENABLE_HUMAN_MODE
+        self.min_delay = config.MIN_DELAY_SECONDS
+        self.max_delay = config.MAX_DELAY_SECONDS
+        
+        # Время последнего действия
+        self.last_action_time = None
+        
+        # Счетчики для паттернов
         self.actions_count = 0
         self.session_start = datetime.now()
         
-        # Персональные характеристики "трейдера"
-        self.typing_speed = random.uniform(0.8, 1.2)  # Скорость "печати"
-        self.reaction_time = random.uniform(0.5, 2.0)  # Время реакции
-        self.fatigue_factor = 0  # Усталость
-        self.mistake_probability = random.uniform(0.01, 0.03)  # Вероятность ошибок
-        
-        # Паттерны поведения
-        self.favorite_numbers = [10, 50, 100, 500, 1000]  # Любимые круглые числа
-        self.working_hours = self._generate_working_hours()
-        
-        logger.debug(f"🧑 Инициализированы параметры человека: скорость={self.typing_speed:.2f}, реакция={self.reaction_time:.2f}")
-    
-    def _generate_working_hours(self) -> tuple:
-        """Генерация рабочих часов трейдера"""
-        # Утренний трейдер, дневной или ночной
-        trader_type = random.choice(['morning', 'day', 'night'])
-        
-        if trader_type == 'morning':
-            return (6, 12)  # 6:00 - 12:00
-        elif trader_type == 'day':
-            return (9, 18)  # 9:00 - 18:00
-        else:
-            return (20, 2)  # 20:00 - 02:00
-        
-    async def human_delay(self):
-        """Базовая человеческая задержка"""
-        if not config.ENABLE_HUMAN_MODE:
-            return
-            
-        base_delay = random.uniform(config.MIN_DELAY_SECONDS, config.MAX_DELAY_SECONDS)
-        
-        # Учитываем усталость
-        fatigue_multiplier = 1 + (self.fatigue_factor * 0.5)
-        delay = base_delay * fatigue_multiplier * self.reaction_time
-        
-        # Учитываем время суток
-        current_hour = datetime.now().hour
-        if not (self.working_hours[0] <= current_hour <= self.working_hours[1]):
-            # Вне рабочих часов работаем медленнее
-            delay *= random.uniform(1.5, 2.0)
-        
-        # Иногда "отвлекаемся"
-        if random.random() < 0.05:  # 5% шанс
-            delay += random.uniform(5, 15)
-            logger.debug(f"💭 Отвлеклись на {delay:.1f} секунд")
-        
-        await asyncio.sleep(delay)
-        
-        # Обновляем параметры
-        self._update_fatigue()
-    
-    async def think_before_action(self):
-        """Имитация размышлений перед действием"""
-        if not config.ENABLE_HUMAN_MODE:
-            return
-            
-        # Базовое время на раздумья
-        think_time = random.uniform(2, 8)
-        
-        # Иногда думаем дольше (сложное решение)
-        if random.random() < 0.15:  # 15% шанс
-            think_time = random.uniform(10, 30)
-            logger.debug(f"🤔 Долгие раздумья: {think_time:.1f} сек")
-        
-        # С опытом думаем быстрее
-        if self.actions_count > 50:
-            think_time *= 0.7
-        
-        await asyncio.sleep(think_time)
+        # Паттерны активности
+        self.activity_patterns = {
+            'morning': (6, 12),    # Утренняя сессия
+            'afternoon': (12, 18), # Дневная сессия
+            'evening': (18, 23),   # Вечерняя сессия
+            'night': (23, 6)       # Ночная сессия (меньше активности)
+        }
     
     async def micro_delay(self):
-        """Микро-задержки между действиями"""
-        if not config.ENABLE_HUMAN_MODE:
+        """Микро-задержка для быстрых операций"""
+        if self.enable_human_mode:
+            await asyncio.sleep(random.uniform(0.1, 0.5))
+    
+    async def human_delay(self, action_type: str = "default"):
+        """Человеческая задержка между действиями"""
+        if not self.enable_human_mode:
             return
-            
-        # Имитация времени на клик мышкой, движение и т.д.
-        delay = random.uniform(0.1, 0.5) * self.typing_speed
         
-        # Иногда "промахиваемся" и повторяем действие
-        if random.random() < 0.02:  # 2% шанс
-            delay += random.uniform(0.5, 1.0)
-            logger.debug("🖱️ Промахнулись мышкой")
+        # Базовая задержка
+        delay = random.uniform(self.min_delay, self.max_delay)
         
+        # Модификаторы задержки в зависимости от типа действия
+        modifiers = {
+            'order': 1.5,      # Больше думаем перед ордером
+            'cancel': 0.8,     # Быстрее отменяем
+            'check': 0.5,      # Быстрая проверка
+            'analysis': 2.0,   # Долгий анализ
+            'panic': 0.3       # Паника - быстрые действия
+        }
+        
+        modifier = modifiers.get(action_type, 1.0)
+        delay *= modifier
+        
+        # Добавляем вариативность по времени суток
+        current_hour = datetime.now().hour
+        if 23 <= current_hour or current_hour < 6:
+            # Ночью медленнее
+            delay *= random.uniform(1.5, 2.5)
+        
+        # Случайные микро-паузы
+        if random.random() < 0.1:
+            delay += random.uniform(0.5, 2.0)
+        
+        logger.debug(f"Человеческая задержка: {delay:.2f}с для действия '{action_type}'")
         await asyncio.sleep(delay)
-    
-    def humanize_amount(self, amount: float) -> float:
-        """Округление суммы как человек"""
-        if not config.ENABLE_HUMAN_MODE:
-            return amount
-            
-        # Люди любят круглые числа
-        if random.random() < 0.3:  # 30% шанс использовать круглое число
-            # Находим ближайшее любимое число
-            for fav_num in self.favorite_numbers:
-                if amount * 0.8 <= fav_num <= amount * 1.2:
-                    return float(fav_num)
-        
-        # Обычное человеческое округление
-        if amount > 1000:
-            # Округляем до сотен
-            return round(amount, -2)
-        elif amount > 100:
-            # Округляем до десятков
-            return round(amount, -1)
-        elif amount > 10:
-            # Округляем до целых
-            return round(amount, 0)
-        elif amount > 1:
-            # Округляем до одного знака
-            return round(amount, 1)
-        else:
-            # Для мелких сумм - до 2-3 знаков
-            return round(amount, random.choice([2, 3]))
-    
-    def should_hesitate(self) -> bool:
-        """Должны ли мы засомневаться"""
-        if not config.ENABLE_HUMAN_MODE:
-            return False
-            
-        # Базовый шанс сомнений
-        hesitation_chance = 0.02  # 2%
-        
-        # Увеличиваем при усталости
-        hesitation_chance += self.fatigue_factor * 0.03
-        
-        # Уменьшаем с опытом (количество действий)
-        if self.actions_count > 50:
-            hesitation_chance *= 0.5
-        
-        # В стрессовых ситуациях (много действий подряд) сомневаемся чаще
-        time_since_last = (datetime.now() - self.last_action_time).total_seconds()
-        if time_since_last < 10:  # Меньше 10 секунд с прошлого действия
-            hesitation_chance *= 2
-        
-        return random.random() < hesitation_chance
-    
-    def _update_fatigue(self):
-        """Обновление усталости"""
-        session_duration = (datetime.now() - self.session_start).total_seconds() / 3600
-        
-        # Усталость растет со временем
-        self.fatigue_factor = min(1.0, session_duration / 8)  # Макс усталость через 8 часов
-        
-        # Сбрасываем усталость после "перерыва"
-        if (datetime.now() - self.last_action_time).total_seconds() > 1800:  # 30 минут
-            self.fatigue_factor *= 0.3
-            logger.debug("😌 Усталость снижена после перерыва")
         
         self.last_action_time = datetime.now()
         self.actions_count += 1
+    
+    async def think_before_action(self):
+        """Имитация размышлений перед важным действием"""
+        if not self.enable_human_mode:
+            return
         
-        # Каждые 20 действий немного меняем характеристики (человек адаптируется)
-        if self.actions_count % 20 == 0:
-            self.reaction_time *= random.uniform(0.9, 1.1)
-            self.typing_speed *= random.uniform(0.95, 1.05)
+        # Иногда долго думаем
+        if random.random() < 0.15:
+            think_time = random.uniform(3, 8)
+            logger.debug(f"Долгое размышление: {think_time:.1f}с")
+            await asyncio.sleep(think_time)
+        else:
+            await self.human_delay('analysis')
+    
+    def should_hesitate(self) -> bool:
+        """Иногда сомневаемся и отменяем действие"""
+        if not self.enable_human_mode:
+            return False
+        
+        # 5% шанс передумать
+        return random.random() < 0.05
+    
+    def humanize_amount(self, amount: float) -> float:
+        """Человеческое округление количества"""
+        if not self.enable_human_mode:
+            return amount
+        
+        # Люди не используют слишком точные числа
+        if amount > 1000:
+            # Округляем до 50 или 100
+            return round(amount / 50) * 50
+        elif amount > 100:
+            # Округляем до 10
+            return round(amount / 10) * 10
+        elif amount > 10:
+            # Округляем до 1
+            return round(amount)
+        else:
+            # Округляем до 0.1
+            return round(amount, 1)
+    
+    def humanize_price(self, price: float, symbol: str) -> float:
+        """Человеческое округление цены"""
+        if not self.enable_human_mode:
+            return price
+        
+        # Для BTC округляем до долларов
+        if 'BTC' in symbol:
+            return round(price)
+        # Для остальных - до центов
+        else:
+            return round(price, 2)
+    
+    async def simulate_mouse_movement(self):
+        """Имитация движения мыши (через случайные задержки)"""
+        if not self.enable_human_mode:
+            return
+        
+        # Случайные микро-паузы как будто двигаем мышь
+        movements = random.randint(2, 5)
+        for _ in range(movements):
+            await asyncio.sleep(random.uniform(0.1, 0.3))
+    
+    async def simulate_typing(self, text_length: int):
+        """Имитация набора текста"""
+        if not self.enable_human_mode:
+            return
+        
+        # ~200-300 символов в минуту для обычного человека
+        typing_speed = random.uniform(200, 300) / 60  # символов в секунду
+        typing_time = text_length / typing_speed
+        
+        # Добавляем вариативность
+        typing_time *= random.uniform(0.8, 1.2)
+        
+        await asyncio.sleep(typing_time)
+    
+    def should_take_break(self) -> bool:
+        """Проверка, нужен ли перерыв"""
+        if not self.enable_human_mode:
+            return False
+        
+        # Проверяем время с начала сессии
+        session_duration = (datetime.now() - self.session_start).total_seconds() / 3600
+        
+        # После 2 часов работы - вероятность перерыва растет
+        if session_duration > 2:
+            break_probability = min(0.3, (session_duration - 2) * 0.1)
+            return random.random() < break_probability
+        
+        # Случайные короткие перерывы
+        return random.random() < 0.02
+    
+    async def take_break(self):
+        """Взять перерыв"""
+        if not self.enable_human_mode:
+            return
+        
+        # Короткий перерыв (1-5 минут) или длинный (10-30 минут)
+        if random.random() < 0.7:
+            # Короткий
+            break_time = random.uniform(60, 300)
+            logger.info(f"Короткий перерыв: {break_time/60:.1f} минут")
+        else:
+            # Длинный
+            break_time = random.uniform(600, 1800)
+            logger.info(f"Длинный перерыв: {break_time/60:.1f} минут")
+        
+        await asyncio.sleep(break_time)
+        
+        # Сбрасываем счетчики после перерыва
+        self.session_start = datetime.now()
+        self.actions_count = 0
+    
+    def add_human_errors(self, value: float, error_rate: float = 0.01) -> float:
+        """Добавление человеческих ошибок в значения"""
+        if not self.enable_human_mode:
+            return value
+        
+        # Изредка делаем небольшие ошибки
+        if random.random() < error_rate:
+            # Ошибка в пределах 1-3%
+            error = random.uniform(-0.03, 0.03)
+            return value * (1 + error)
+        
+        return value
+    
+    def get_activity_level(self) -> float:
+        """Получить уровень активности в зависимости от времени"""
+        current_hour = datetime.now().hour
+        
+        # Ночью меньше активности
+        if 0 <= current_hour < 6:
+            return random.uniform(0.2, 0.4)
+        # Утром нарастает
+        elif 6 <= current_hour < 9:
+            return random.uniform(0.5, 0.7)
+        # День - максимум
+        elif 9 <= current_hour < 18:
+            return random.uniform(0.8, 1.0)
+        # Вечер - снижается
+        elif 18 <= current_hour < 22:
+            return random.uniform(0.6, 0.8)
+        # Поздний вечер
+        else:
+            return random.uniform(0.3, 0.5)
+    
+    async def simulate_reading_time(self, text_length: int):
+        """Имитация времени чтения"""
+        if not self.enable_human_mode:
+            return
+        
+        # ~200-250 слов в минуту для среднего человека
+        words = text_length / 5  # примерно 5 символов на слово
+        reading_speed = random.uniform(200, 250) / 60  # слов в секунду
+        reading_time = words / reading_speed
+        
+        await asyncio.sleep(reading_time * random.uniform(0.8, 1.2))
