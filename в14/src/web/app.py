@@ -48,7 +48,7 @@ class PairsUpdateRequest(BaseModel):
 @app.get("/", response_class=HTMLResponse)
 async def root():
     """Главная страница с дашбордом"""
-    return dashboard_html
+    return get_dashboard_html()
 
 @app.post("/api/login")
 async def login(request: LoginRequest):
