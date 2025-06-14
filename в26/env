@@ -1,0 +1,214 @@
+# ========================================
+# 🔑 API НАСТРОЙКИ BYBIT
+# ========================================
+BYBIT_API_KEY=P0PKvshbBlaJjc7p0t
+BYBIT_API_SECRET=BS0zOOEgzhLcEqr9E6h2EuWFD91FOus7nkTw
+BYBIT_TESTNET=true
+# ✅ ВАЖНО: Не переключайтесь на mainnet без тщательного тестирования!
+
+# ========================================
+# 🗄️ БАЗА ДАННЫХ - ОСНОВНЫЕ НАСТРОЙКИ
+# ========================================
+DB_HOST=localhost
+DB_NAME=crypto_top_bd_mysql
+DB_USER=crypto_top_admin
+DB_PASSWORD=LSM6_PqnuZ10nvEdzfe6
+DB_PORT=3306
+
+# ========================================
+# 🗄️ БАЗА ДАННЫХ - URL ПОДКЛЮЧЕНИЯ
+# ========================================
+# Синхронное подключение (основное)
+DATABASE_URL=mysql+pymysql://crypto_top_admin:LSM6_PqnuZ10nvEdzfe6@localhost:3306/crypto_top_bd_mysql
+
+# Асинхронное подключение (для FastAPI и веб-интерфейса)
+ASYNC_DATABASE_URL=mysql+aiomysql://crypto_top_admin:LSM6_PqnuZ10nvEdzfe6@localhost:3306/crypto_top_bd_mysql
+
+# 🔄 Альтернатива для SQLite (если MySQL не работает):
+# DATABASE_URL=sqlite:///./crypto_bot.db
+# ASYNC_DATABASE_URL=sqlite+aiosqlite:///./crypto_bot.db
+
+# ========================================
+# 🚀 REDIS (пока отключен, добавим позже)
+# ========================================
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+ENABLE_REDIS=false
+# 📝 Примечание: Redis нужен для кэширования и очередей задач
+
+# ========================================
+# 💰 ТОРГОВЫЕ ПАРАМЕТРЫ
+# ========================================
+TRADING_SYMBOL=BTCUSDT
+INITIAL_CAPITAL=1000
+MAX_POSITION_SIZE_PERCENT=5
+STOP_LOSS_PERCENT=2
+TAKE_PROFIT_PERCENT=4
+
+# Дополнительные торговые настройки
+MIN_ORDER_SIZE=10.0
+MAX_LEVERAGE=1
+SLIPPAGE_TOLERANCE=0.1
+
+# ========================================
+# 🤖 ЧЕЛОВЕКОПОДОБНОЕ ПОВЕДЕНИЕ
+# ========================================
+ENABLE_HUMAN_MODE=true
+MIN_DELAY_SECONDS=0.5
+MAX_DELAY_SECONDS=3.0
+RANDOM_DELAY_ENABLED=true
+
+# ========================================
+# 🌐 ВЕБ-ИНТЕРФЕЙС
+# ========================================
+WEB_HOST=0.0.0.0
+WEB_PORT=8000
+DEBUG_MODE=true
+RELOAD_ON_CHANGE=true
+
+# CORS настройки (безопасность)
+ALLOWED_ORIGINS=http://localhost:8000,http://127.0.0.1:8000,http://0.0.0.0:8000
+ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS
+ALLOWED_HEADERS=*
+
+# ========================================
+# 📱 TELEGRAM УВЕДОМЛЕНИЯ
+# ========================================
+TELEGRAM_BOT_TOKEN=7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8
+TELEGRAM_CHAT_ID=-4889364288
+TELEGRAM_ENABLED=true
+
+# Настройки уведомлений
+NOTIFY_ON_TRADE=true
+NOTIFY_ON_ERROR=true
+NOTIFY_ON_START_STOP=true
+NOTIFY_ON_PROFIT_LOSS=true
+
+# ========================================
+# 🔐 БЕЗОПАСНОСТЬ
+# ========================================
+SECRET_KEY=crypto-trading-bot-secret-key-systemetech-2025-very-long-and-secure
+JWT_SECRET_KEY=jwt-secret-key-for-authentication-systemetech-2025
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=60
+
+# Административные настройки
+ADMIN_USERNAME=admin
+ADMIN_EMAIL=admin@systemetech.ru
+ADMIN_PASSWORD=SecurePassword123!
+
+# ========================================
+# 📈 ТОРГОВЫЕ ПАРЫ И СТРАТЕГИИ
+# ========================================
+TRADING_PAIRS=BTCUSDT,ETHUSDT,BNBUSDT,SOLUSDT
+MAX_POSITIONS=1
+MAX_CONCURRENT_TRADES=3
+
+# Активные стратегии
+ENABLE_MULTI_INDICATOR=true
+ENABLE_SCALPING=true
+ENABLE_MOMENTUM=true
+ENABLE_CONSERVATIVE=false
+DEFAULT_STRATEGY=multi_indicator
+
+# ========================================
+# ⚖️ РИСК-МЕНЕДЖМЕНТ
+# ========================================
+MIN_RISK_REWARD_RATIO=2.0
+MAX_DAILY_TRADES=10
+MAX_DAILY_LOSS_PERCENT=10
+MAX_DRAWDOWN_PERCENT=15
+
+# Дополнительные лимиты
+MAX_CONSECUTIVE_LOSSES=3
+COOLING_OFF_PERIOD_MINUTES=30
+EMERGENCY_STOP_LOSS_PERCENT=5
+
+# ========================================
+# 📊 ЛОГИРОВАНИЕ И МОНИТОРИНГ
+# ========================================
+LOG_LEVEL=INFO
+LOG_FILE_PATH=./logs/crypto_bot.log
+LOG_MAX_SIZE_MB=50
+LOG_BACKUP_COUNT=5
+
+# Детальность логов
+LOG_TRADES=true
+LOG_SIGNALS=true
+LOG_ERRORS=true
+LOG_API_CALLS=false
+
+# ========================================
+# 🔧 ТЕХНИЧЕСКИЕ НАСТРОЙКИ
+# ========================================
+# Настройки подключений
+CONNECTION_TIMEOUT=30
+READ_TIMEOUT=60
+MAX_RETRIES=3
+RETRY_DELAY=1
+
+# Производительность
+THREAD_POOL_SIZE=4
+ASYNC_WORKERS=2
+ENABLE_CACHING=true
+CACHE_TTL_SECONDS=300
+
+# ========================================
+# 📈 ИНДИКАТОРЫ И АНАЛИЗ
+# ========================================
+# Технические индикаторы
+RSI_PERIOD=14
+RSI_OVERSOLD=30
+RSI_OVERBOUGHT=70
+
+SMA_FAST_PERIOD=10
+SMA_SLOW_PERIOD=20
+
+EMA_PERIOD=12
+MACD_FAST=12
+MACD_SLOW=26
+MACD_SIGNAL=9
+
+BOLLINGER_PERIOD=20
+BOLLINGER_DEVIATION=2
+
+# ========================================
+# 🎯 НАСТРОЙКИ РЕЖИМОВ РАБОТЫ
+# ========================================
+# Режимы работы
+PAPER_TRADING=true
+BACKTEST_MODE=false
+LIVE_TRADING=false
+
+# Временные рамки
+DEFAULT_TIMEFRAME=1m
+ANALYSIS_TIMEFRAMES=1m,5m,15m,1h
+DATA_HISTORY_DAYS=30
+
+# ========================================
+# 🚨 АЛЕРТЫ И УВЕДОМЛЕНИЯ
+# ========================================
+# Email уведомления (опционально)
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=
+SMTP_PASSWORD=
+EMAIL_NOTIFICATIONS=false
+
+# Webhook уведомления
+WEBHOOK_URL=
+WEBHOOK_ENABLED=false
+
+# ========================================
+# 🧪 РАЗРАБОТКА И ОТЛАДКА
+# ========================================
+DEVELOPMENT_MODE=true
+ENABLE_PROFILING=false
+ENABLE_METRICS=true
+METRICS_PORT=9090
+
+# Тестирование
+MOCK_TRADING=false
+SIMULATE_LATENCY=false
+TEST_MODE=false
