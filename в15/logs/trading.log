@@ -1,0 +1,450 @@
+
+2025-06-13 16:35:12,096 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 16:35:12,097 - __main__ - INFO - ==================================================
+2025-06-13 16:35:12,097 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 16:35:12,097 - __main__ - INFO - ==================================================
+2025-06-13 16:35:12,097 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 16:35:12,265 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:35:12,267 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 16:35:12,267 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 16:35:34,039 - __main__ - INFO - Получен сигнал 2, инициируем остановку...
+2025-06-13 16:35:34,140 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 16:35:40,724 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:35:40,725 - src.core.bot_manager - INFO - Бот успешно остановлен
+2025-06-13 16:35:40,725 - __main__ - INFO - 👋 Бот остановлен
+2025-06-13 16:49:38,535 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 16:49:38,537 - __main__ - INFO - ==================================================
+2025-06-13 16:49:38,537 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 16:49:38,537 - __main__ - INFO - ==================================================
+2025-06-13 16:49:38,538 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 16:49:38,707 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:49:38,709 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 16:49:38,709 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 16:49:47,164 - __main__ - INFO - Получен сигнал 2, инициируем остановку...
+2025-06-13 16:49:48,302 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 16:49:51,795 - __main__ - INFO - Получен сигнал 2, инициируем остановку...
+2025-06-13 16:49:53,741 - __main__ - INFO - Получен сигнал 2, инициируем остановку...
+2025-06-13 16:49:53,947 - __main__ - INFO - Получен сигнал 2, инициируем остановку...
+2025-06-13 16:49:54,115 - __main__ - INFO - Получен сигнал 2, инициируем остановку...
+2025-06-13 16:50:07,031 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:50:07,032 - src.core.bot_manager - INFO - Бот успешно остановлен
+2025-06-13 16:50:07,032 - __main__ - INFO - 👋 Бот остановлен
+2025-06-13 16:54:18,131 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 16:54:18,132 - __main__ - INFO - ==================================================
+2025-06-13 16:54:18,132 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 16:54:18,132 - __main__ - INFO - ==================================================
+2025-06-13 16:54:18,132 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 16:54:18,336 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:54:18,337 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 16:54:18,337 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 16:54:32,287 - __main__ - INFO - 📡 Получен сигнал 2, инициируем graceful shutdown...
+2025-06-13 16:54:33,206 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 16:54:33,206 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 16:54:33,206 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 16:54:38,208 - src.core.bot_manager - INFO - 🛑 Основной цикл отменен
+2025-06-13 16:54:38,209 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 16:54:38,209 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 16:54:38,392 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:54:38,393 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 16:54:38,393 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 16:54:38,393 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 16:54:56,359 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 16:54:56,360 - __main__ - INFO - ==================================================
+2025-06-13 16:54:56,360 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 16:54:56,360 - __main__ - INFO - ==================================================
+2025-06-13 16:54:56,360 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 16:54:56,534 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:54:56,535 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 16:54:56,535 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 16:55:01,980 - __main__ - INFO - 📡 Получен сигнал 2, инициируем graceful shutdown...
+2025-06-13 16:55:01,982 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 16:55:01,982 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 16:55:01,982 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 16:55:06,984 - src.core.bot_manager - INFO - 🛑 Основной цикл отменен
+2025-06-13 16:55:06,985 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 16:55:06,985 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 16:55:07,239 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:55:07,240 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 16:55:07,240 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 16:55:07,240 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 16:57:07,397 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 16:57:07,398 - __main__ - INFO - ==================================================
+2025-06-13 16:57:07,398 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 16:57:07,398 - __main__ - INFO - ==================================================
+2025-06-13 16:57:07,398 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 16:57:07,658 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:57:07,660 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 16:57:07,660 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 16:57:13,733 - __main__ - INFO - 📡 Получен сигнал 2, инициируем graceful shutdown...
+2025-06-13 16:57:13,740 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 16:57:13,741 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 16:57:13,741 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 16:57:18,744 - src.core.bot_manager - INFO - 🛑 Основной цикл отменен
+2025-06-13 16:57:18,744 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 16:57:18,744 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 16:57:18,967 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 16:57:18,968 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 16:57:18,968 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 16:57:18,968 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 17:19:26,256 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 17:19:26,257 - __main__ - INFO - ==================================================
+2025-06-13 17:19:26,257 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 17:19:26,257 - __main__ - INFO - ==================================================
+2025-06-13 17:19:26,257 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 17:19:26,425 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 17:19:26,426 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 17:19:26,427 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 17:41:27,225 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 17:41:27,226 - __main__ - INFO - ==================================================
+2025-06-13 17:41:27,226 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 17:41:27,226 - __main__ - INFO - ==================================================
+2025-06-13 17:41:27,226 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 17:41:27,418 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 17:41:27,419 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 17:41:27,419 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 17:41:47,768 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 17:41:47,768 - __main__ - INFO - ==================================================
+2025-06-13 17:41:47,768 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 17:41:47,768 - __main__ - INFO - ==================================================
+2025-06-13 17:41:47,769 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 17:41:47,949 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 17:41:47,951 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 17:41:47,951 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 17:47:48,611 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 17:47:48,612 - __main__ - INFO - ==================================================
+2025-06-13 17:47:48,612 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 17:47:48,612 - __main__ - INFO - ==================================================
+2025-06-13 17:47:48,612 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 17:47:48,777 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 17:47:48,778 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 17:47:48,779 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 17:48:18,809 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 17:48:18,810 - __main__ - INFO - ==================================================
+2025-06-13 17:48:18,810 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 17:48:18,810 - __main__ - INFO - ==================================================
+2025-06-13 17:48:18,810 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 17:48:19,004 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 17:48:19,005 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 17:48:19,005 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 17:54:55,834 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 17:54:55,836 - __main__ - INFO - ==================================================
+2025-06-13 17:54:55,836 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 17:54:55,836 - __main__ - INFO - ==================================================
+2025-06-13 17:54:55,836 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 17:54:56,007 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 17:54:56,009 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 17:54:56,009 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 18:05:47,903 - __main__ - INFO - 📡 Получен сигнал 15, инициируем graceful shutdown...
+2025-06-13 18:05:47,903 - __main__ - INFO - 📡 Получен сигнал 15, инициируем graceful shutdown...
+2025-06-13 18:05:47,903 - __main__ - INFO - 📡 Получен сигнал 15, инициируем graceful shutdown...
+2025-06-13 18:05:47,904 - __main__ - INFO - 📡 Получен сигнал 15, инициируем graceful shutdown...
+2025-06-13 18:05:47,904 - __main__ - INFO - 📡 Получен сигнал 15, инициируем graceful shutdown...
+2025-06-13 18:05:47,904 - __main__ - INFO - 📡 Получен сигнал 15, инициируем graceful shutdown...
+2025-06-13 18:05:48,100 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 18:05:48,100 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 18:05:48,100 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 18:05:48,181 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 18:05:48,181 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 18:05:48,182 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 18:05:48,241 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 18:05:48,241 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 18:05:48,242 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 18:05:48,322 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 18:05:48,323 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 18:05:48,323 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 18:05:48,414 - src.core.bot_manager - INFO - 🛑 Получен сигнал остановки в основном цикле
+2025-06-13 18:05:48,414 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 18:05:48,414 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 18:05:48,645 - src.core.bot_manager - INFO - 🛑 Получен сигнал остановки в основном цикле
+2025-06-13 18:05:48,646 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 18:05:48,646 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 18:05:48,721 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 18:05:48,721 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 18:05:48,721 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 18:05:48,723 - __main__ - INFO - 🛑 Получен сигнал остановки, инициируем shutdown...
+2025-06-13 18:05:48,723 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-13 18:05:48,723 - src.core.bot_manager - INFO - 🛑 Инициируем остановку бота...
+2025-06-13 18:05:48,729 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 18:05:48,730 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 18:05:48,730 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 18:05:48,730 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 18:05:48,866 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 18:05:48,867 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 18:05:48,867 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 18:05:48,867 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 18:05:49,183 - src.core.bot_manager - INFO - 🛑 Получен сигнал остановки в основном цикле
+2025-06-13 18:05:49,183 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 18:05:49,183 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 18:05:49,353 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 18:05:49,354 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 18:05:49,354 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 18:05:49,354 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 18:05:49,723 - src.core.bot_manager - INFO - 🛑 Получен сигнал остановки в основном цикле
+2025-06-13 18:05:49,723 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 18:05:49,723 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 18:05:49,724 - src.core.bot_manager - INFO - 🛑 Получен сигнал остановки в основном цикле
+2025-06-13 18:05:49,724 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 18:05:49,724 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 18:05:49,903 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 18:05:49,904 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 18:05:49,904 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 18:05:49,905 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 18:05:49,925 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 18:05:49,926 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 18:05:49,926 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 18:05:49,926 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 18:05:53,243 - src.core.bot_manager - INFO - 🛑 Основной цикл отменен
+2025-06-13 18:05:53,243 - src.core.bot_manager - INFO - 🏁 Основной торговый цикл завершен
+2025-06-13 18:05:53,243 - src.core.bot_manager - INFO - ✅ Основная задача завершена корректно
+2025-06-13 18:05:56,250 - src.core.bot_manager - WARNING - ⚠️ Таймаут отправки уведомления об остановке
+2025-06-13 18:05:56,251 - src.core.bot_manager - INFO - ✅ Бот успешно остановлен
+2025-06-13 18:05:56,251 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-13 18:05:56,251 - __main__ - INFO - 👋 Завершение программы
+2025-06-13 18:14:47,820 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 18:14:47,821 - __main__ - INFO - ==================================================
+2025-06-13 18:14:47,821 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 18:14:47,821 - __main__ - INFO - ==================================================
+2025-06-13 18:14:47,821 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 18:14:48,020 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 18:14:48,021 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 18:14:48,021 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-13 18:16:40,746 - src.core.bot_manager - INFO - Загружено позиций: 0, активных пар: 8
+2025-06-13 18:16:40,747 - __main__ - INFO - ==================================================
+2025-06-13 18:16:40,747 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-13 18:16:40,747 - __main__ - INFO - ==================================================
+2025-06-13 18:16:40,748 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-13 18:16:40,915 - httpx - INFO - HTTP Request: POST https://api.telegram.org/bot7821491963:AAHHT3nGM4qhn8FQu1goYXZN6TQ9h7l1WQ8/sendMessage "HTTP/1.1 200 OK"
+2025-06-13 18:16:40,916 - src.core.bot_manager - INFO - Бот успешно запущен
+2025-06-13 18:16:40,916 - src.core.bot_manager - INFO - Запуск основного торгового цикла
+2025-06-14 10:30:32,438 - __main__ - INFO - ==================================================
+2025-06-14 10:30:32,438 - __main__ - INFO - 🚀 Crypto Trading Bot v3.0 - Full System
+2025-06-14 10:30:32,438 - __main__ - INFO - ==================================================
+2025-06-14 10:30:32,444 - __main__ - INFO - ==================================================
+2025-06-14 10:30:32,445 - __main__ - INFO - 🌐 Crypto Trading Bot Web Interface
+2025-06-14 10:30:32,445 - __main__ - INFO - ==================================================
+2025-06-14 10:30:32,445 - __main__ - INFO - 🌐 Запуск веб-интерфейса на 0.0.0.0:8000...
+2025-06-14 10:30:34,445 - __main__ - INFO - ==================================================
+2025-06-14 10:30:34,446 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-14 10:30:34,446 - __main__ - INFO - ==================================================
+2025-06-14 10:30:34,446 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-14 10:30:34,446 - src.bot.manager - INFO - 🚀 Начинаем запуск бота...
+2025-06-14 10:30:35,380 - src.bot.manager - ERROR - ❌ Не удалось подключиться к БД: Textual SQL expression 'SELECT 1' should be explicitly declared as text('SELECT 1')
+2025-06-14 10:30:35,381 - src.bot.manager - ERROR - ❌ Ошибка запуска: Проверки перед запуском не пройдены
+Traceback (most recent call last):
+  File "/var/www/www-root/data/www/systemetech.ru/src/bot/manager.py", line 95, in start
+    raise ValueError("Проверки перед запуском не пройдены")
+ValueError: Проверки перед запуском не пройдены
+2025-06-14 10:30:35,395 - __main__ - ERROR - ❌ Не удалось запустить бота: Ошибка запуска: Проверки перед запуском не пройдены
+2025-06-14 10:30:35,396 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-14 10:30:35,396 - src.bot.manager - INFO - 🛑 Начинаем остановку бота...
+2025-06-14 10:30:35,406 - src.bot.manager - ERROR - ❌ Ошибка остановки: (pymysql.err.OperationalError) (1054, "Unknown column 'trades.user_id' in 'field list'")
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT trades.id AS trades_id, trades.symbol AS trades_symbol, trades.side AS trades_side, trades.entry_price AS trades_entry_price, trades.exit_price AS trades_exit_price, trades.quantity AS trades_quantity, trades.profit AS trades_profit, trades.profit_percent AS trades_profit_percent, trades.status AS trades_status, trades.strategy AS trades_strategy, trades.stop_loss AS trades_stop_loss, trades.take_profit AS trades_take_profit, trades.trailing_stop AS trades_trailing_stop, trades.commission AS trades_commission, trades.notes AS trades_notes, trades.created_at AS trades_created_at, trades.closed_at AS trades_closed_at, trades.user_id AS trades_user_id 
+FROM trades) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Traceback (most recent call last):
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/cursors.py", line 153, in execute
+    result = self._query(query)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 558, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 822, in _read_query_result
+    result.read()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 1200, in read
+    first_packet = self.connection._read_packet()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 772, in _read_packet
+    packet.raise_for_error()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'trades.user_id' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/var/www/www-root/data/www/systemetech.ru/src/bot/manager.py", line 160, in stop
+    self._save_statistics()
+  File "/var/www/www-root/data/www/systemetech.ru/src/bot/manager.py", line 659, in _save_statistics
+    total_trades = db.query(Trade).count()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 3132, in count
+    self._legacy_from_self(col).enable_eagerloads(False).scalar()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 2825, in scalar
+    ret = self.one()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 2798, in one
+    return self._iter().one()  # type: ignore
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 2847, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/session.py", line 2308, in execute
+    return self._execute_internal(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/session.py", line 2190, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 2343, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/cursors.py", line 153, in execute
+    result = self._query(query)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 558, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 822, in _read_query_result
+    result.read()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 1200, in read
+    first_packet = self.connection._read_packet()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 772, in _read_packet
+    packet.raise_for_error()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (1054, "Unknown column 'trades.user_id' in 'field list'")
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT trades.id AS trades_id, trades.symbol AS trades_symbol, trades.side AS trades_side, trades.entry_price AS trades_entry_price, trades.exit_price AS trades_exit_price, trades.quantity AS trades_quantity, trades.profit AS trades_profit, trades.profit_percent AS trades_profit_percent, trades.status AS trades_status, trades.strategy AS trades_strategy, trades.stop_loss AS trades_stop_loss, trades.take_profit AS trades_take_profit, trades.trailing_stop AS trades_trailing_stop, trades.commission AS trades_commission, trades.notes AS trades_notes, trades.created_at AS trades_created_at, trades.closed_at AS trades_closed_at, trades.user_id AS trades_user_id 
+FROM trades) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-14 10:30:35,410 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-14 10:30:35,410 - __main__ - INFO - 🛑 Остановка веб-интерфейса...
+2025-06-14 10:30:35,412 - __main__ - INFO - ✅ Веб-интерфейс остановлен
+2025-06-14 10:30:35,412 - __main__ - INFO - 👋 Завершение программы
+2025-06-14 10:30:35,412 - __main__ - INFO - 🏁 Программа завершена
+2025-06-14 10:34:22,945 - __main__ - INFO - ==================================================
+2025-06-14 10:34:22,945 - __main__ - INFO - 🚀 Crypto Trading Bot v3.0 - Full System
+2025-06-14 10:34:22,945 - __main__ - INFO - ==================================================
+2025-06-14 10:34:22,952 - __main__ - INFO - ==================================================
+2025-06-14 10:34:22,952 - __main__ - INFO - 🌐 Crypto Trading Bot Web Interface
+2025-06-14 10:34:22,952 - __main__ - INFO - ==================================================
+2025-06-14 10:34:22,952 - __main__ - INFO - 🌐 Запуск веб-интерфейса на 0.0.0.0:8000...
+2025-06-14 10:34:23,492 - src.web.websocket - INFO - 🔄 Запущен цикл WebSocket broadcast
+2025-06-14 10:34:24,952 - __main__ - INFO - ==================================================
+2025-06-14 10:34:24,952 - __main__ - INFO - 🤖 Crypto Trading Bot v3.0
+2025-06-14 10:34:24,952 - __main__ - INFO - ==================================================
+2025-06-14 10:34:24,952 - __main__ - INFO - 🚀 Запуск торгового бота...
+2025-06-14 10:34:24,952 - src.bot.manager - INFO - 🚀 Начинаем запуск бота...
+2025-06-14 10:34:27,090 - src.bot.manager - ERROR - ❌ Не удалось подключиться к БД: Textual SQL expression 'SELECT 1' should be explicitly declared as text('SELECT 1')
+2025-06-14 10:34:27,090 - src.bot.manager - ERROR - ❌ Ошибка запуска: Проверки перед запуском не пройдены
+Traceback (most recent call last):
+  File "/var/www/www-root/data/www/systemetech.ru/src/bot/manager.py", line 95, in start
+    raise ValueError("Проверки перед запуском не пройдены")
+ValueError: Проверки перед запуском не пройдены
+2025-06-14 10:34:27,115 - __main__ - ERROR - ❌ Не удалось запустить бота: Ошибка запуска: Проверки перед запуском не пройдены
+2025-06-14 10:34:27,115 - __main__ - INFO - 🛑 Остановка бота...
+2025-06-14 10:34:27,115 - src.bot.manager - INFO - 🛑 Начинаем остановку бота...
+2025-06-14 10:34:27,131 - src.bot.manager - ERROR - ❌ Ошибка остановки: (pymysql.err.OperationalError) (1054, "Unknown column 'trades.user_id' in 'field list'")
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT trades.id AS trades_id, trades.symbol AS trades_symbol, trades.side AS trades_side, trades.entry_price AS trades_entry_price, trades.exit_price AS trades_exit_price, trades.quantity AS trades_quantity, trades.profit AS trades_profit, trades.profit_percent AS trades_profit_percent, trades.status AS trades_status, trades.strategy AS trades_strategy, trades.stop_loss AS trades_stop_loss, trades.take_profit AS trades_take_profit, trades.trailing_stop AS trades_trailing_stop, trades.commission AS trades_commission, trades.notes AS trades_notes, trades.created_at AS trades_created_at, trades.closed_at AS trades_closed_at, trades.user_id AS trades_user_id 
+FROM trades) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Traceback (most recent call last):
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/cursors.py", line 153, in execute
+    result = self._query(query)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 558, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 822, in _read_query_result
+    result.read()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 1200, in read
+    first_packet = self.connection._read_packet()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 772, in _read_packet
+    packet.raise_for_error()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.OperationalError: (1054, "Unknown column 'trades.user_id' in 'field list'")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/var/www/www-root/data/www/systemetech.ru/src/bot/manager.py", line 160, in stop
+    self._save_statistics()
+  File "/var/www/www-root/data/www/systemetech.ru/src/bot/manager.py", line 659, in _save_statistics
+    total_trades = db.query(Trade).count()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 3132, in count
+    self._legacy_from_self(col).enable_eagerloads(False).scalar()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 2825, in scalar
+    ret = self.one()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 2798, in one
+    return self._iter().one()  # type: ignore
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/query.py", line 2847, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/session.py", line 2308, in execute
+    return self._execute_internal(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/session.py", line 2190, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/orm/context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1416, in execute
+    return meth(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/sql/elements.py", line 516, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1639, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 2343, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/sqlalchemy/engine/default.py", line 922, in do_execute
+    cursor.execute(statement, parameters)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/cursors.py", line 153, in execute
+    result = self._query(query)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/cursors.py", line 322, in _query
+    conn.query(q)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 558, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 822, in _read_query_result
+    result.read()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 1200, in read
+    first_packet = self.connection._read_packet()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/connections.py", line 772, in _read_packet
+    packet.raise_for_error()
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/protocol.py", line 221, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "/var/www/www-root/data/www/systemetech.ru/venv/lib/python3.10/site-packages/pymysql/err.py", line 143, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.OperationalError: (pymysql.err.OperationalError) (1054, "Unknown column 'trades.user_id' in 'field list'")
+[SQL: SELECT count(*) AS count_1 
+FROM (SELECT trades.id AS trades_id, trades.symbol AS trades_symbol, trades.side AS trades_side, trades.entry_price AS trades_entry_price, trades.exit_price AS trades_exit_price, trades.quantity AS trades_quantity, trades.profit AS trades_profit, trades.profit_percent AS trades_profit_percent, trades.status AS trades_status, trades.strategy AS trades_strategy, trades.stop_loss AS trades_stop_loss, trades.take_profit AS trades_take_profit, trades.trailing_stop AS trades_trailing_stop, trades.commission AS trades_commission, trades.notes AS trades_notes, trades.created_at AS trades_created_at, trades.closed_at AS trades_closed_at, trades.user_id AS trades_user_id 
+FROM trades) AS anon_1]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2025-06-14 10:34:27,140 - __main__ - INFO - ✅ Бот остановлен корректно
+2025-06-14 10:34:27,140 - __main__ - INFO - 🛑 Остановка веб-интерфейса...
+2025-06-14 10:34:27,306 - __main__ - INFO - 🔄 WebSocket broadcast задача остановлена
+2025-06-14 10:34:27,315 - __main__ - INFO - ✅ Веб-интерфейс остановлен
+2025-06-14 10:34:27,315 - __main__ - INFO - 👋 Завершение программы
+2025-06-14 10:34:27,315 - __main__ - INFO - 🏁 Программа завершена
+2025-06-14 10:38:22,139 - __main__ - INFO - ==================================================
+2025-06-14 10:38:22,140 - __main__ - INFO - 🌐 Crypto Trading Bot Web Interface
+2025-06-14 10:38:22,140 - __main__ - INFO - ==================================================
+2025-06-14 10:38:22,140 - __main__ - INFO - 🌐 Запуск веб-интерфейса на 0.0.0.0:8000...
+2025-06-14 10:38:22,593 - src.web.websocket - INFO - 🔄 Запущен цикл WebSocket broadcast
+2025-06-14 10:39:18,642 - __main__ - INFO - 🏁 Программа завершена
