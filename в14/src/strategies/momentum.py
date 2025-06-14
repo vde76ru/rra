@@ -9,6 +9,7 @@ from ta.momentum import RSIIndicator, ROCIndicator
 from ta.trend import EMAIndicator
 from ta.volatility import AverageTrueRange
 import logging
+from typing import Dict
 
 from .base import BaseStrategy, TradingSignal
 
