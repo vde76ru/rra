@@ -10,6 +10,7 @@ from ta.trend import EMAIndicator, MACD, ADXIndicator
 from ta.volatility import BollingerBands, AverageTrueRange
 from ta.volume import OnBalanceVolumeIndicator
 import logging
+from typing import Dict
 
 from .base import BaseStrategy, TradingSignal
 
