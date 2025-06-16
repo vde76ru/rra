@@ -1,0 +1,59 @@
+# Core dependencies
+python-dotenv>=1.0.0
+asyncio>=3.4.3
+aiohttp>=3.8.0
+sqlalchemy>=2.0.0
+alembic>=1.11.0
+
+# Exchange APIs
+ccxt>=4.0.0
+websockets>=11.0
+
+# ML/AI
+scikit-learn>=1.3.0
+tensorflow>=2.13.0
+xgboost>=1.7.0
+optuna>=3.3.0
+joblib>=1.3.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+ta-lib>=0.4.28  # Требует системной установки TA-Lib
+
+# NLP
+transformers>=4.30.0
+torch>=2.0.0  # Для transformers
+nltk>=3.8.0
+textblob>=0.17.0
+
+# Social Media
+tweepy>=4.14.0
+praw>=7.7.0
+asyncpraw>=7.7.0  # Async версия для Reddit
+
+# Web Framework
+flask>=2.3.0
+flask-socketio>=5.3.0
+flask-cors>=4.0.0
+python-socketio>=5.9.0
+
+# Visualization
+plotly>=5.15.0
+dash>=2.11.0
+
+# News & RSS
+feedparser>=6.0.10
+newspaper3k>=0.2.8
+beautifulsoup4>=4.12.0
+
+# Logging & Monitoring
+colorlog>=6.7.0
+
+# Database
+pymysql>=1.1.0
+psycopg2-binary>=2.9.0  # Для PostgreSQL
+
+# Utils
+python-dateutil>=2.8.0
+pytz>=2023.3
