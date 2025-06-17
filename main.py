@@ -1,226 +1,133 @@
+#!/usr/bin/env python3
 """
-Обновленный главный файл с интеграцией полного дашборда
+Главная точка входа в приложение Crypto Trading Bot
 Файл: main.py
 """
-
+import os
+import sys
 import asyncio
 import argparse
-import signal
-import sys
+import logging
 from pathlib import Path
-from typing import Optional
 
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+# Добавляем путь к модулям
+sys.path.insert(0, str(Path(__file__).parent))
 
-# Импорты нашего проекта
-from src.core.config import Config
-from src.core.clean_logging import init_logging_system, get_clean_logger, trading_logger
-from src.bot.manager import BotManager  # ✅ ИСПРАВЛЕНО: используем правильное имя класса
-from src.web.api_routes import router as api_router, set_bot_manager, ws_manager
-from src.core.database import init_database
+# Настройка логирования
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
-# Глобальные переменные
-config = Config()
-bot_manager: Optional[BotManager] = None  # ✅ ИСПРАВЛЕНО: BotManager вместо TradingBotManager
-web_app: Optional[FastAPI] = None
-shutdown_event = asyncio.Event()
+def setup_environment():
+    """Настройка окружения"""
+    # Проверяем наличие .env файла
+    env_path = Path('/etc/crypto/config/.env')
+    if not env_path.exists():
+        logger.warning(f"⚠️ Файл конфигурации не найден: {env_path}")
+        logger.info("Используем переменные окружения по умолчанию")
+    
+    # Создаем необходимые директории
+    dirs = ['logs', 'data', 'data/cache', 'data/backups']
+    for dir_name in dirs:
+        Path(dir_name).mkdir(parents=True, exist_ok=True)
+    
+    logger.info("✅ Окружение настроено")
 
-# Инициализируем логгер после настройки системы логирования
-logger = None
-
-def setup_signal_handlers():
-    """Настройка обработчиков сигналов для graceful shutdown"""
-    def signal_handler(signum, frame):
-        logger.info(f"🛑 Получен сигнал {signum}, начинаем завершение...")
-        shutdown_event.set()
-    
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-
-def create_web_app() -> FastAPI:
-    """Создание FastAPI приложения"""
-    app = FastAPI(
-        title="🚀 Crypto Trading Bot Dashboard",
-        description="Полная панель управления криптотрейдинг ботом",
-        version="3.0.0",
-        docs_url="/docs",
-        redoc_url="/redoc"
-    )
-    
-    # CORS middleware для фронтенда
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-    
-    # Подключаем роуты дашборда
-    app.include_router(api_router)
-    
-    @app.on_event("startup")
-    async def startup_event():
-        logger.info("🌐 Веб-приложение запускается...")
-        
-        # Инициализируем базу данных
-        try:
-            await init_database()
-            logger.info("✅ База данных инициализирована")
-        except Exception as e:
-            logger.error(f"❌ Ошибка инициализации БД: {e}")
-    
-    @app.on_event("shutdown")
-    async def shutdown_event():
-        logger.info("🌐 Веб-приложение завершается...")
-    
-    return app
-
-async def run_bot_only():
-    """Запуск только торгового бота без веб-интерфейса"""
-    global bot_manager
-    
-    logger.info("🤖 Запуск торгового бота...")
-    
+def create_database():
+    """Создание таблиц БД"""
     try:
-        # Создаем менеджера бота
-        bot_manager = BotManager()  # ✅ ИСПРАВЛЕНО: BotManager без параметров
+        from src.core.database import db
+        db.create_tables()
+        logger.info("✅ База данных инициализирована")
+    except Exception as e:
+        logger.error(f"❌ Ошибка создания БД: {e}")
+        sys.exit(1)
+
+async def run_bot():
+    """Запуск торгового бота"""
+    try:
+        from src.bot.manager import bot_manager
         
-        # Запускаем бота с базовой стратегией
+        logger.info("🚀 Запуск торгового бота...")
+        
+        # Запускаем бота
         success, message = await bot_manager.start()
-        if not success:
-            logger.error(f"❌ Не удалось запустить бота: {message}")
-            return
         
-        logger.info("✅ Торговый бот запущен успешно")
-        
-        # Ждем сигнала завершения
-        await shutdown_event.wait()
-        
-    except Exception as e:
-        logger.error(f"💥 Ошибка в торговом боте: {e}", exc_info=True)
-        raise
-    finally:
-        if bot_manager:
-            await bot_manager.stop()
-            logger.info("✅ Торговый бот остановлен")
-
-async def run_web_only():
-    """Запуск только веб-интерфейса"""
-    global web_app
-    
-    logger.info("🌐 Запуск веб-интерфейса...")
-    
-    try:
-        # Создаем FastAPI приложение
-        web_app = create_web_app()
-        
-        # Настройки сервера
-        config_uvicorn = uvicorn.Config(
-            app=web_app,
-            host="0.0.0.0",
-            port=8000,
-            log_level="warning",  # Убираем лишние логи uvicorn
-            access_log=False,     # Отключаем access логи
-            ws_ping_interval=20,
-            ws_ping_timeout=10
-        )
-        
-        server = uvicorn.Server(config_uvicorn)
-        
-        logger.info("🚀 Веб-интерфейс запущен на http://0.0.0.0:8000")
-        logger.info("📊 Дашборд доступен по адресу: http://0.0.0.0:8000")
-        
-        # Запускаем сервер
-        await server.serve()
-        
-    except Exception as e:
-        logger.error(f"💥 Ошибка веб-интерфейса: {e}", exc_info=True)
-        raise
-
-async def run_full_system():
-    """Запуск полной системы: бот + веб-интерфейс"""
-    global bot_manager, web_app
-    
-    logger.info("🚀 Запуск полной системы...")
-    
-    try:
-        # Создаем менеджера бота
-        bot_manager = BotManager()
-        
-        # Устанавливаем ссылку на менеджера в API роутах
-        set_bot_manager(bot_manager)
-        
-        # Создаем веб-приложение
-        web_app = create_web_app()
-        
-        # Настройки сервера
-        config_uvicorn = uvicorn.Config(
-            app=web_app,
-            host="0.0.0.0",
-            port=8000,
-            log_level="warning",
-            access_log=False,
-            ws_ping_interval=20,
-            ws_ping_timeout=10
-        )
-        
-        server = uvicorn.Server(config_uvicorn)
-        
-        logger.info("🚀 Полная система запущена на http://0.0.0.0:8000")
-        logger.info("📊 Дашборд: http://0.0.0.0:8000")
-        logger.info("📖 Документация API: http://0.0.0.0:8000/docs")
-        
-        # Запускаем сервер
-        await server.serve()
-        
-    except Exception as e:
-        logger.error(f"💥 Ошибка полной системы: {e}", exc_info=True)
-        raise
-    finally:
-        if bot_manager:
-            await bot_manager.stop()
-            logger.info("✅ Система остановлена")
-
-async def main():
-    """Главная функция приложения"""
-    global logger
-    
-    # Инициализируем систему логирования
-    init_logging_system()
-    logger = get_clean_logger(__name__)
-    
-    # Настройка обработчиков сигналов
-    setup_signal_handlers()
-    
-    # Парсинг аргументов командной строки
-    parser = argparse.ArgumentParser(description="Crypto Trading Bot")
-    parser.add_argument("--mode", choices=["bot", "web", "full"], default="full",
-                        help="Режим запуска (bot=только бот, web=только веб, full=полная система)")
-    args = parser.parse_args()
-    
-    logger.info("=" * 50)
-    logger.info("🚀 Crypto Trading Bot v3.0 - Полная система")
-    logger.info("=" * 50)
-    
-    try:
-        if args.mode == "bot":
-            await run_bot_only()
-        elif args.mode == "web":
-            await run_web_only()
-        else:  # full
-            await run_full_system()
+        if success:
+            logger.info(f"✅ {message}")
+            
+            # Держим бота запущенным
+            while bot_manager.is_running:
+                await asyncio.sleep(1)
+        else:
+            logger.error(f"❌ {message}")
+            sys.exit(1)
             
     except KeyboardInterrupt:
-        logger.info("🛑 Получен сигнал прерывания")
+        logger.info("⏹️ Получен сигнал остановки...")
+        await bot_manager.stop()
     except Exception as e:
-        logger.error(f"💥 Критическая ошибка: {e}", exc_info=True)
+        logger.error(f"❌ Критическая ошибка: {e}")
         sys.exit(1)
-    finally:
-        logger.info("🏁 Завершение программы")
-        logger.info("📈 Программа завершена")
 
-if __name__ == "__main__":
-    asyncio.run(main())
+def run_web():
+    """Запуск веб-интерфейса"""
+    try:
+        from src.web.app import app, socketio
+        
+        logger.info("🌐 Запуск веб-интерфейса...")
+        
+        # Запускаем Flask с SocketIO
+        socketio.run(
+            app,
+            host='0.0.0.0',
+            port=5000,
+            debug=False,
+            use_reloader=False
+        )
+    except Exception as e:
+        logger.error(f"❌ Ошибка запуска веб-интерфейса: {e}")
+        sys.exit(1)
+
+def main():
+    """Главная функция"""
+    parser = argparse.ArgumentParser(description='Crypto Trading Bot')
+    parser.add_argument(
+        'mode',
+        choices=['bot', 'web', 'both', 'setup'],
+        help='Режим запуска: bot (только бот), web (только веб), both (всё), setup (настройка)'
+    )
+    
+    args = parser.parse_args()
+    
+    # Настройка окружения
+    setup_environment()
+    
+    if args.mode == 'setup':
+        # Только создаем БД и выходим
+        create_database()
+        logger.info("✅ Настройка завершена")
+        
+    elif args.mode == 'bot':
+        # Запуск только бота
+        create_database()
+        asyncio.run(run_bot())
+        
+    elif args.mode == 'web':
+        # Запуск только веб-интерфейса
+        create_database()
+        run_web()
+        
+    elif args.mode == 'both':
+        # Запуск всего
+        create_database()
+        
+        # В будущем здесь можно запустить оба процесса параллельно
+        logger.info("ℹ️ Для запуска бота и веб-интерфейса одновременно:")
+        logger.info("  1. Запустите в одном терминале: python main.py bot")
+        logger.info("  2. Запустите в другом терминале: python main.py web")
+
+if __name__ == '__main__':
+    main()
