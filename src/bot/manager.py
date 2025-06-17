@@ -1,19 +1,45 @@
 """
 Единый менеджер торгового бота - ядро системы
-Путь: /var/www/www-root/data/www/systemetech.ru/src/bot/manager.py
-
-Этот файл является "мозгом" всего торгового бота. Он управляет:
-- Запуском и остановкой торговли
-- Координацией всех компонентов (биржа, стратегии, уведомления)
-- Управлением позициями и рисками
-- Сохранением статистики и состояния
-
-Важные принципы архитектуры:
-1. Singleton pattern - только один экземпляр менеджера
-2. Graceful degradation - продолжаем работу даже при частичных сбоях
-3. Подробное логирование для отладки и мониторинга
-4. Безопасная работа с базой данных
+Путь: src/bot/manager.py
 """
+# Стандартные библиотеки
+import asyncio
+import sys
+import logging
+import psutil
+import os
+from typing import Any, List, Optional, Tuple, Dict
+from datetime import datetime, timedelta
+from enum import Enum
+import random
+
+# SQLAlchemy
+from sqlalchemy import text, func
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
+
+# Импорты из core (все модели должны быть здесь)
+from ..core.models import (
+    Trade, Signal, BotState, TradingPair, 
+    TradeStatus, OrderSide, Balance, User,
+    TradingLog, MLModel
+)
+from ..core.database import SessionLocal, db
+from ..core.config import config
+
+# Остальные импорты
+from ..exchange.client import ExchangeClient
+from ..strategies import strategy_factory
+from ..analysis.market_analyzer import MarketAnalyzer
+from ..notifications.telegram import telegram_notifier
+from .trader import Trader
+from .risk_manager import RiskManager
+from ..strategies.auto_strategy_selector import auto_strategy_selector
+from ..logging.smart_logger import SmartLogger
+from ..logging.log_manager import cleanup_scheduler
+
+
+from src.core.database import db, SessionLocal
 
 import asyncio
 import sys
@@ -30,6 +56,7 @@ from sqlalchemy import text, func
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
+
 # Импорты компонентов нашей системы
 from ..core.config import config
 from ..core.database import SessionLocal
@@ -40,9 +67,15 @@ from ..analysis.market_analyzer import MarketAnalyzer
 from ..notifications.telegram import telegram_notifier
 from .trader import Trader
 from .risk_manager import RiskManager
+from ..strategies.auto_strategy_selector import auto_strategy_selector
+from ..logging.smart_logger import SmartLogger
+from ..logging.log_manager import cleanup_scheduler
+from ..core.models import Balance, User, Trade
 
 # Настраиваем логгер для этого модуля
-logger = logging.getLogger(__name__)
+smart_logger = SmartLogger(__name__)
+logger = smart_logger  # Для совместимости со старым кодом
+
 
 class BotStatus(Enum):
     """
@@ -103,6 +136,9 @@ class BotManager:
         if not BotManager._initialized:
             logger.info("🔧 Инициализируем BotManager...")
             
+            # Инициализация системы логирования
+            asyncio.create_task(self._initialize_logging())
+            
             # === ОСНОВНЫЕ КОМПОНЕНТЫ ===
             # Каждый компонент отвечает за свою область
             self.exchange = ExchangeClient()           # Взаимодействие с биржей
@@ -134,6 +170,25 @@ class BotManager:
             BotManager._initialized = True
             logger.info("✅ BotManager инициализирован успешно")
     
+    async def _initialize_logging(self):
+        """Инициализирует систему логирования"""
+        try:  # ← Добавлен правильный отступ!
+            # Запускаем DB writer для логов
+            await smart_logger.start_db_writer()
+            
+            # Запускаем планировщик очистки
+            await cleanup_scheduler.start()
+            
+            smart_logger.info(
+                "Система умного логирования инициализирована",
+                category='system',
+                log_stats=smart_logger.get_statistics()
+            )
+        except Exception as e:
+            logger.error(f"Ошибка инициализации системы логирования: {e}")
+            # Можно добавить fallback на обычное логирование
+    
+    
     # =========================================================================
     # === УПРАВЛЕНИЕ ЖИЗНЕННЫМ ЦИКЛОМ БОТА ===
     # =========================================================================
@@ -161,8 +216,12 @@ class BotManager:
         try:
             # Устанавливаем статус "запускается"
             self.status = BotStatus.STARTING
-            logger.info("🚀 Начинаем запуск торгового бота...")
-            
+            smart_logger.info(
+                "🚀 Начинаем запуск торгового бота...",
+                category='system',
+                action='bot_start'
+            )
+                        
             # === ШАГ 1: ПРЕДВАРИТЕЛЬНЫЕ ПРОВЕРКИ ===
             logger.info("🔍 Выполняем предварительные проверки...")
             if not await self._pre_start_checks():
@@ -415,13 +474,12 @@ class BotManager:
     
     async def _generate_signal(self, symbol: str, market_data: Dict) -> Optional[Signal]:
         """
-        Генерация торгового сигнала для конкретной пары
+        Генерация торгового сигнала с автоматическим выбором стратегии
         
-        Процесс генерации:
-        1. Получаем конфигурацию торговой пары
-        2. Создаем соответствующую стратегию
-        3. Анализируем рыночные данные
-        4. Формируем сигнал с метаданными
+        Новая версия:
+        1. Автоматически выбирает лучшую стратегию для текущих условий
+        2. Использует машинное обучение для улучшения выбора
+        3. Адаптируется к изменениям рынка
         
         Args:
             symbol: Торговая пара (например, 'BTCUSDT')
@@ -431,106 +489,87 @@ class BotManager:
             Signal или None если сигнал не сгенерирован
         """
         try:
-            # Получаем конфигурацию для данной пары
+            logger.info(f"🎯 Генерируем сигнал для {symbol}")
+            
+            # === ШАГ 1: АВТОМАТИЧЕСКИЙ ВЫБОР СТРАТЕГИИ ===
+            # Используем интеллектуальный селектор
+            best_strategy_name, strategy_confidence = await auto_strategy_selector.select_best_strategy(symbol)
+            
+            logger.info(f"🧠 Выбрана стратегия '{best_strategy_name}' для {symbol} "
+                       f"с уверенностью {strategy_confidence:.1%}")
+            
+            # === ШАГ 2: ПОЛУЧАЕМ КОНФИГУРАЦИЮ ПАРЫ ===
             pair_config = self._get_pair_config(symbol)
             
-            # Создаем стратегию на основе конфигурации
-            strategy = self.strategy_factory.create(pair_config.strategy)
+            # Обновляем стратегию в конфигурации на выбранную
+            # (это временное изменение, не сохраняется в БД)
+            original_strategy = pair_config.strategy
+            pair_config.strategy = best_strategy_name
             
-            # Анализируем рыночные данные с помощью стратегии
+            # === ШАГ 3: СОЗДАЕМ ЭКЗЕМПЛЯР ВЫБРАННОЙ СТРАТЕГИИ ===
+            try:
+                strategy = self.strategy_factory.create(best_strategy_name)
+            except ValueError as e:
+                logger.error(f"❌ Не удалось создать стратегию {best_strategy_name}: {e}")
+                # Fallback к безопасной стратегии
+                strategy = self.strategy_factory.create('safe_multi_indicator')
+                best_strategy_name = 'safe_multi_indicator'
+            
+            # === ШАГ 4: АНАЛИЗИРУЕМ РЫНОЧНЫЕ ДАННЫЕ ===
             analysis = await strategy.analyze(market_data['df'], symbol)
             
             # Если стратегия рекомендует ждать, сигнал не генерируем
             if analysis.action == 'WAIT':
+                logger.debug(f"📊 Стратегия {best_strategy_name} рекомендует ждать: {analysis.reason}")
                 return None
             
-            # Создаем объект сигнала
+            # === ШАГ 5: КОРРЕКТИРУЕМ УВЕРЕННОСТЬ ===
+            # Учитываем уверенность в выборе стратегии
+            combined_confidence = analysis.confidence * strategy_confidence
+            
+            # Если общая уверенность слишком низкая, не торгуем
+            if combined_confidence < 0.5:
+                logger.info(f"📊 Низкая общая уверенность ({combined_confidence:.1%}), "
+                           f"пропускаем сигнал")
+                return None
+            
+            # === ШАГ 6: СОЗДАЕМ СИГНАЛ ===
             signal = Signal(
                 symbol=symbol,
                 action=analysis.action,
-                confidence=analysis.confidence,
+                confidence=combined_confidence,
                 price=market_data['current_price'],
                 stop_loss=analysis.stop_loss,
                 take_profit=analysis.take_profit,
-                strategy=strategy.name,
-                reason=analysis.reason,
+                strategy=best_strategy_name,  # Используем выбранную стратегию
+                reason=f"[AUTO] {analysis.reason} (стратегия: {best_strategy_name}, "
+                       f"уверенность выбора: {strategy_confidence:.1%})",
                 created_at=datetime.utcnow()
             )
             
-            logger.debug(f"🎯 Сгенерирован сигнал {signal.action} для {symbol}: {signal.reason}")
+            logger.info(f"✅ Сгенерирован сигнал {signal.action} для {symbol}: {signal.reason}")
+            
+            # === ШАГ 7: ОБУЧЕНИЕ СЕЛЕКТОРА ===
+            # Асинхронно запускаем обучение если накопилось достаточно данных
+            if len(auto_strategy_selector.selection_history) > 100 and \
+               len(auto_strategy_selector.selection_history) % 100 == 0:
+                asyncio.create_task(self._train_strategy_selector())
+            
             return signal
             
         except Exception as e:
             logger.error(f"❌ Ошибка генерации сигнала для {symbol}: {e}")
             return None
-    
-    async def _execute_signal_human_like(self, signal: Signal):
-        """
-        Исполнение торгового сигнала с имитацией человеческого поведения
-        
-        Особенности "человеческого" исполнения:
-        1. Время на обдумывание (5-20 секунд)
-        2. Случайные сомнения (10% пропусков)
-        3. Отвлечения и задержки (5% случаев)
-        4. Проверка через риск-менеджмент
-        
-        Args:
-            signal: Торговый сигнал для исполнения
-        """
-        # === ШАГ 1: ПРОВЕРКА РИСКОВ ===
-        current_balance = self._get_current_balance()
-        if not self.risk_manager.check_signal(signal, self.positions, current_balance):
-            logger.info(f"🚫 Сигнал {signal.symbol} отклонен риск-менеджментом")
-            return
-        
-        # === ШАГ 2: ИМИТАЦИЯ ВРЕМЕНИ НА ПРИНЯТИЕ РЕШЕНИЯ ===
-        if config.ENABLE_HUMAN_MODE:
-            thinking_time = random.uniform(5, 20)
-            logger.debug(f"🤔 Обдумываем сигнал {signal.symbol} в течение {thinking_time:.1f} секунд")
-            await asyncio.sleep(thinking_time)
-        
-        # === ШАГ 3: СЛУЧАЙНЫЕ СОМНЕНИЯ ===
-        if config.ENABLE_HUMAN_MODE and random.random() < 0.1:  # 10% шанс
-            logger.info(f"😕 Решили пропустить сигнал {signal.symbol} (человеческие сомнения)")
-            return
-        
-        # === ШАГ 4: СЛУЧАЙНЫЕ ОТВЛЕЧЕНИЯ ===
-        if config.ENABLE_HUMAN_MODE and random.random() < 0.05:  # 5% шанс
-            delay = random.uniform(30, 120)
-            logger.info(f"📱 Отвлеклись, откладываем исполнение {signal.symbol} на {delay:.0f} секунд")
-            await asyncio.sleep(delay)
-        
-        # === ШАГ 5: ИСПОЛНЕНИЕ ЧЕРЕЗ TRADER ===
-        try:
-            trade = await self.trader.execute_signal(signal)
             
-            if trade:
-                # Добавляем сделку в наши позиции
-                self.positions[signal.symbol] = trade
-                
-                # Обновляем информацию о сигнале
-                signal.executed = True
-                signal.executed_at = datetime.utcnow()
-                signal.trade_id = trade.id
-                self._update_signal_db(signal)
-                
-                # Отправляем уведомление об открытии позиции
-                try:
-                    await self.notifier.send_trade_opened(
-                        symbol=signal.symbol,
-                        side=signal.action,
-                        amount=trade.quantity,
-                        price=trade.entry_price
-                    )
-                except Exception as notify_error:
-                    logger.warning(f"⚠️ Не удалось отправить уведомление о сделке: {notify_error}")
-                
-                logger.info(f"✅ Сигнал {signal.symbol} исполнен: {signal.action} {trade.quantity} по цене {trade.entry_price}")
-            else:
-                logger.warning(f"⚠️ Не удалось исполнить сигнал {signal.symbol}")
-                
-        except Exception as execution_error:
-            logger.error(f"❌ Ошибка исполнения сигнала {signal.symbol}: {execution_error}")
+    async def _train_strategy_selector(self):
+        """Асинхронное обучение селектора стратегий"""
+        try:
+            logger.info("🎓 Запускаем обучение селектора стратегий...")
+            await asyncio.get_event_loop().run_in_executor(
+                None, auto_strategy_selector.train_ml_model
+            )
+        except Exception as e:
+            logger.error(f"❌ Ошибка обучения селектора: {e}")
     
     # =========================================================================
     # === УПРАВЛЕНИЕ ОТКРЫТЫМИ ПОЗИЦИЯМИ ===
@@ -1838,4 +1877,4 @@ if __name__ == "__main__":
     # Полезно для тестирования отдельных компонентов
     print("🤖 BotManager module loaded successfully")
     print(f"📊 Manager instance: {bot_manager}")
-    print(f"🔧 Configuration loaded: {hasattr(config, 'BYBIT_API_KEY')}")
+    print(f"🔧 Configuration loaded: {hasattr(config, 'BYBIT_API_KEY')}")    """

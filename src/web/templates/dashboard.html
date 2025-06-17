@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}Дашборд - Crypto Trading Bot{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Статистика -->
+    <div class="col-12">
+        <h2><i class="fas fa-tachometer-alt"></i> Панель управления</h2>
+        <hr>
+    </div>
+    
+    <!-- Управление ботом -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-robot"></i> Управление ботом</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <h3 id="bot-status-display">
+                        {% if bot_status %}
+                            <span class="text-success"><i class="fas fa-check-circle"></i> Работает</span>
+                        {% else %}
+                            <span class="text-danger"><i class="fas fa-times-circle"></i> Остановлен</span>
+                        {% endif %}
+                    </h3>
+                </div>
+                <button id="btn-start" class="btn btn-success" {% if bot_status %}disabled{% endif %}>
+                    <i class="fas fa-play"></i> Запустить
+                </button>
+                <button id="btn-stop" class="btn btn-danger" {% if not bot_status %}disabled{% endif %}>
+                    <i class="fas fa-stop"></i> Остановить
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Баланс -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-wallet"></i> Баланс</h5>
+            </div>
+            <div class="card-body">
+                <div id="balance-display">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Загрузка...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Общая статистика -->
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie"></i> Статистика</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><strong>Всего сделок:</strong> <span id="total-trades">{{ stats.total_trades|default(0) }}</span></li>
+                    <li><strong>Прибыльных:</strong> <span class="text-success">{{ stats.profitable_trades|default(0) }}</span></li>
+                    <li><strong>Убыточных:</strong> <span class="text-danger">{{ stats.losing_trades|default(0) }}</span></li>
+                    <li><strong>Win Rate:</strong> <span>{{ "%.1f"|format(stats.win_rate|default(0) * 100) }}%</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Активные позиции -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-list"></i> Активные позиции</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Символ</th>
+                                <th>Направление</th>
+                                <th>Количество</th>
+                                <th>Цена входа</th>
+                                <th>Текущая цена</th>
+                                <th>P&L</th>
+                                <th>Время</th>
+                            </tr>
+                        </thead>
+                        <tbody id="active-positions">
+                            {% for position in active_positions %}
+                            <tr>
+                                <td>{{ position.symbol }}</td>
+                                <td>
+                                    {% if position.side.value == 'buy' %}
+                                        <span class="badge bg-success">LONG</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">SHORT</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ position.quantity }}</td>
+                                <td>${{ "%.2f"|format(position.entry_price) }}</td>
+                                <td class="current-price" data-symbol="{{ position.symbol }}">-</td>
+                                <td class="pnl" data-position-id="{{ position.id }}">-</td>
+                                <td>{{ position.created_at.strftime('%H:%M:%S') }}</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">Нет активных позиций</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Последние сделки -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-history"></i> Последние сделки</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Время</th>
+                                <th>Символ</th>
+                                <th>Тип</th>
+                                <th>Цена входа</th>
+                                <th>Цена выхода</th>
+                                <th>Прибыль</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trade in recent_trades[:10] %}
+                            <tr>
+                                <td>{{ trade.created_at.strftime('%d.%m %H:%M') }}</td>
+                                <td>{{ trade.symbol }}</td>
+                                <td>
+                                    {% if trade.side.value == 'buy' %}
+                                        <span class="badge bg-success">LONG</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">SHORT</span>
+                                    {% endif %}
+                                </td>
+                                <td>${{ "%.2f"|format(trade.entry_price) }}</td>
+                                <td>
+                                    {% if trade.profit %}
+                                        <span class="{% if trade.profit > 0 %}text-success{% else %}text-danger{% endif %}">
+                                            ${{ "%.2f"|format(trade.profit) }}
+                                        </span>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if trade.status.value == 'closed' else 'warning' }}">
+                                        {{ trade.status.value }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">Нет сделок</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Кнопка запуска бота
+    $('#btn-start').click(function() {
+        $(this).prop('disabled', true);
+        $.post('/api/bot/start', function(response) {
+            if (response.success) {
+                $('#btn-start').prop('disabled', true);
+                $('#btn-stop').prop('disabled', false);
+                $('#bot-status-display').html('<span class="text-success"><i class="fas fa-check-circle"></i> Работает</span>');
+                alert('Бот успешно запущен!');
+            } else {
+                alert('Ошибка: ' + response.message);
+                $('#btn-start').prop('disabled', false);
+            }
+        });
+    });
+    
+    // Кнопка остановки бота
+    $('#btn-stop').click(function() {
+        if (confirm('Вы уверены, что хотите остановить бота?')) {
+            $(this).prop('disabled', true);
+            $.post('/api/bot/stop', function(response) {
+                if (response.success) {
+                    $('#btn-stop').prop('disabled', true);
+                    $('#btn-start').prop('disabled', false);
+                    $('#bot-status-display').html('<span class="text-danger"><i class="fas fa-times-circle"></i> Остановлен</span>');
+                    alert('Бот остановлен');
+                } else {
+                    alert('Ошибка: ' + response.message);
+                    $('#btn-stop').prop('disabled', false);
+                }
+            });
+        }
+    });
+    
+    // Загрузка баланса
+    function loadBalance() {
+        $.get('/api/balance', function(data) {
+            if (data.error) {
+                $('#balance-display').html('<div class="alert alert-danger">Ошибка загрузки баланса</div>');
+            } else {
+                let html = '<ul class="list-unstyled mb-0">';
+                for (let asset in data) {
+                    if (data[asset] > 0.0001) {
+                        html += `<li><strong>${asset}:</strong> ${data[asset].toFixed(4)}</li>`;
+                    }
+                }
+                html += '</ul>';
+                $('#balance-display').html(html);
+            }
+        }).fail(function() {
+            $('#balance-display').html('<div class="alert alert-warning">Баланс недоступен</div>');
+        });
+    }
+    
+    // WebSocket обновления
+    socket.on('trade_update', function(data) {
+        // Обновляем таблицу сделок
+        location.reload(); // Простое обновление, можно сделать умнее
+    });
+    
+    socket.on('balance_update', function(data) {
+        loadBalance();
+    });
+    
+    // Загружаем баланс при старте
+    loadBalance();
+    
+    // Обновляем баланс каждые 30 секунд
+    setInterval(loadBalance, 30000);
+});
+</script>
+{% endblock %}

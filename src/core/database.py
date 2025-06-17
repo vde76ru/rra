@@ -1,182 +1,153 @@
 """
-Гибридное подключение к базе данных MySQL
-Поддерживает как синхронный, так и асинхронный доступ
+Database module с поддержкой SessionLocal для обратной совместимости
 """
-from typing import AsyncGenerator, Generator
-from contextlib import asynccontextmanager, contextmanager
+import os
+from contextlib import contextmanager
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.pool import QueuePool
+from dotenv import load_dotenv
+import logging
+from .models import Balance, User, Trade
 
-# ✅ Импорты для обоих подходов
-from sqlalchemy import create_engine, text
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+# Загружаем переменные окружения
+for env_path in ['/etc/crypto/config/.env', '.env']:
+    if os.path.exists(env_path):
+        load_dotenv(env_path)
+        break
 
-# ✅ Асинхронные импорты (опционально)
-try:
-    from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-    ASYNC_AVAILABLE = True
-except ImportError:
-    ASYNC_AVAILABLE = False
-    print("⚠️ Асинхронная поддержка недоступна, используем синхронный режим")
+logger = logging.getLogger(__name__)
 
-from .config import config
-
-# ✅ СИНХРОННАЯ версия (основная, всегда работает)
-engine = create_engine(
-    config.DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20,
-    pool_recycle=3600,
-    echo=False
-)
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
-
-# ✅ АСИНХРОННАЯ версия (если доступна)
-if ASYNC_AVAILABLE:
-    try:
-        async_engine = create_async_engine(
-            config.ASYNC_DATABASE_URL,
-            pool_pre_ping=True,
-            pool_size=10,
-            max_overflow=20,
-            pool_recycle=3600,
-            echo=False
-        )
-        AsyncSessionLocal = async_sessionmaker(
-            async_engine,
-            class_=AsyncSession,
-            expire_on_commit=False
-        )
-    except Exception as e:
-        print(f"⚠️ Не удалось создать асинхронный engine: {e}")
-        ASYNC_AVAILABLE = False
-
-# ✅ Функции для FastAPI и веб-интерфейса
-
-def get_db() -> Generator[Session, None, None]:
-    """
-    🎯 СИНХРОННАЯ версия для FastAPI
-    Всегда работает, простая и надежная
-    """
-    db = SessionLocal()
-    try:
-        yield db
-        db.commit()
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
-
-async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
-    """
-    🎯 АСИНХРОННАЯ версия для FastAPI
-    Работает только если установлен aiomysql
-    """
-    if not ASYNC_AVAILABLE:
-        raise RuntimeError("Асинхронная поддержка недоступна. Используйте get_db() вместо get_db_session()")
+class Database:
+    """Singleton класс для работы с базой данных"""
     
-    async with AsyncSessionLocal() as session:
+    _instance = None
+    _engine = None
+    _metadata = None
+    _SessionLocal = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(Database, cls).__new__(cls)
+        return cls._instance
+    
+    def __init__(self):
+        """Инициализация подключения к БД"""
+        if self._engine is None:
+            self.database_url = os.getenv('DATABASE_URL')
+            if not self.database_url:
+                # Формируем URL из отдельных параметров
+                db_host = os.getenv('DB_HOST', 'localhost')
+                db_port = os.getenv('DB_PORT', '3306')
+                db_user = os.getenv('DB_USER')
+                db_pass = os.getenv('DB_PASSWORD')
+                db_name = os.getenv('DB_NAME')
+                
+                if db_user and db_pass and db_name:
+                    self.database_url = f"mysql+pymysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}?charset=utf8mb4"
+                else:
+                    # Fallback на SQLite
+                    self.database_url = "sqlite:///./crypto_bot.db"
+                    logger.warning("Используется SQLite база данных")
+            
+            # Создаем engine
+            self._engine = create_engine(
+                self.database_url,
+                pool_pre_ping=True,
+                echo=False
+            )
+            
+            # Единый metadata для всех таблиц
+            self._metadata = MetaData()
+            
+            # Создаем SessionLocal для обратной совместимости
+            self._SessionLocal = sessionmaker(
+                bind=self._engine,
+                autocommit=False,
+                autoflush=False
+            )
+            
+            # Scoped session
+            self.Session = scoped_session(self._SessionLocal)
+            
+            logger.info("✅ Database инициализирована")
+    
+    @property
+    def engine(self):
+        """Получить engine"""
+        return self._engine
+    
+    @property
+    def metadata(self):
+        """Получить metadata"""
+        return self._metadata
+    
+    @contextmanager
+    def get_session(self):
+        """Контекстный менеджер для сессии"""
+        session = self.Session()
         try:
             yield session
-            await session.commit()
-        except Exception:
-            await session.rollback()
+            session.commit()
+        except Exception as e:
+            session.rollback()
+            logger.error(f"Ошибка в сессии БД: {e}")
             raise
         finally:
-            await session.close()
-
-# ✅ Прямое использование в коде
-
-@contextmanager
-def get_sync_db():
-    """
-    🔧 Синхронный контекстный менеджер
+            session.close()
     
-    Пример:
-    with get_sync_db() as db:
-        users = db.query(User).all()
-    """
-    db = SessionLocal()
+    def create_session(self):
+        """Создать новую сессию"""
+        return self.Session()
+    
+    def close(self):
+        """Закрыть все соединения"""
+        self.Session.remove()
+        if self._engine:
+            self._engine.dispose()
+
+# Создаем глобальный экземпляр
+db = Database()
+
+# Экспортируем для обратной совместимости
+engine = db.engine
+metadata = db.metadata
+get_session = db.get_session
+create_session = db.create_session
+SessionLocal = db._SessionLocal  # ВАЖНО: экспортируем SessionLocal!
+
+# Дополнительные функции для совместимости
+def get_db():
+    """Генератор сессий для FastAPI"""
+    session = SessionLocal()
     try:
-        yield db
-        db.commit()
-    except Exception:
-        db.rollback()
-        raise
+        yield session
     finally:
-        db.close()
-
-@asynccontextmanager
-async def get_async_db():
-    """
-    🔧 Асинхронный контекстный менеджер
-    
-    Пример:
-    async with get_async_db() as db:
-        result = await db.execute(text("SELECT * FROM users"))
-    """
-    if not ASYNC_AVAILABLE:
-        raise RuntimeError("Асинхронная поддержка недоступна")
-    
-    async with AsyncSessionLocal() as session:
+        session.close()
+        
+# Декоратор для транзакций
+def transaction(func):
+    """Декоратор для выполнения функции в транзакции"""
+    def wrapper(*args, **kwargs):
+        session = SessionLocal()
         try:
-            yield session
-            await session.commit()
-        except Exception:
-            await session.rollback()
+            result = func(session, *args, **kwargs)
+            session.commit()
+            return result
+        except Exception as e:
+            session.rollback()
             raise
+        finally:
+            session.close()
+    return wrapper
 
-# ✅ Функция инициализации
-def init_database():
-    """
-    🚀 Синхронная инициализация базы данных
-    """
-    try:
-        # Создаем таблицы если нужно
-        Base.metadata.create_all(bind=engine)
-        
-        # Тестируем соединение
-        with SessionLocal() as session:
-            result = session.execute(text("SELECT 1")).scalar()
-            if result == 1:
-                print("✅ База данных MySQL подключена успешно (синхронно)")
-                return True
-    except Exception as e:
-        print(f"❌ Ошибка подключения к MySQL: {e}")
-        return False
-
-async def init_database_async():
-    """
-    🚀 Асинхронная инициализация (если доступна)
-    """
-    if not ASYNC_AVAILABLE:
-        return init_database()
-    
-    try:
-        async with async_engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        
-        async with AsyncSessionLocal() as session:
-            result = await session.execute(text("SELECT 1"))
-            if result.scalar() == 1:
-                print("✅ База данных MySQL подключена успешно (асинхронно)")
-                return True
-    except Exception as e:
-        print(f"❌ Ошибка асинхронного подключения: {e}")
-        return init_database()  # Fallback к синхронной версии
-
-# ✅ Экспорт всех функций
 __all__ = [
-    'get_db',           # ✅ Основная функция для FastAPI
-    'get_db_session',   # ✅ Асинхронная для FastAPI (если доступна)
-    'get_sync_db',      # ✅ Синхронный контекстный менеджер
-    'get_async_db',     # ✅ Асинхронный контекстный менеджер
-    'init_database',    # ✅ Синхронная инициализация
-    'init_database_async', # ✅ Асинхронная инициализация
-    'SessionLocal',     # ✅ Для прямого использования
-    'engine',          # ✅ Engine
-    'Base'             # ✅ Базовый класс
+    'Database',
+    'db',
+    'engine',
+    'metadata',
+    'get_session',
+    'create_session',
+    'SessionLocal',  # Добавляем в экспорт
+    'get_db'
 ]

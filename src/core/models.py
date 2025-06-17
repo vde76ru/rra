@@ -1,134 +1,470 @@
-"""
-Модели базы данных
-Путь: /var/www/www-root/data/www/systemetech.ru/src/core/models.py
-"""
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, Text, Enum, ForeignKey
-from sqlalchemy.orm import relationship
-from datetime import datetime
-from .database import Base
-import enum
+from sqlalchemy.ext.declarative import declarative_base
+from typing import Optional, List, Dict, Any
 
-class TradeStatus(enum.Enum):
+# Добавьте эти импорты в начало файла (после существующих)
+"""
+Модели базы данных для Crypto Trading Bot
+Путь: src/core/models.py
+
+ВАЖНО: Этот файл содержит ТОЛЬКО модели SQLAlchemy без импортов других модулей проекта
+для избежания циклических зависимостей
+"""
+from datetime import datetime
+from enum import Enum
+from sqlalchemy import (
+    Column, Integer, String, Float, Boolean, DateTime, Text, JSON, 
+    ForeignKey, Enum as SQLEnum, Index, UniqueConstraint
+)
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+
+# Создаем базовый класс для всех моделей
+Base = declarative_base()
+
+# ===== ENUMS =====
+
+
+class Balance(Base):
+    """Модель баланса пользователя"""
+    __tablename__ = 'balances'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    currency = Column(String(10), nullable=False)
+    amount = Column(Float, default=0.0)
+    locked = Column(Float, default=0.0)
+    exchange = Column(String(50), default='bybit')
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    user = relationship('User', back_populates='balances')
+    
+    def __repr__(self):
+        return f'<Balance {self.currency}: {self.amount}>'
+
+class TradeStatus(str, Enum):
+    """Статусы сделок"""
+    PENDING = "PENDING"
     OPEN = "OPEN"
     CLOSED = "CLOSED"
     CANCELLED = "CANCELLED"
+    ERROR = "ERROR"
 
-class OrderSide(enum.Enum):
+class OrderSide(str, Enum):
+    """Направление сделки"""
     BUY = "BUY"
     SELL = "SELL"
 
-class Trade(Base):
-    __tablename__ = "trades"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    symbol = Column(String(20), index=True, nullable=False)
-    side = Column(Enum(OrderSide), nullable=False)
-    entry_price = Column(Float, nullable=False)
-    exit_price = Column(Float, nullable=True)
-    quantity = Column(Float, nullable=False)
-    profit = Column(Float, nullable=True)
-    profit_percent = Column(Float, nullable=True)
-    status = Column(Enum(TradeStatus), default=TradeStatus.OPEN, nullable=False)
-    strategy = Column(String(50), nullable=False)
-    stop_loss = Column(Float, nullable=True)
-    take_profit = Column(Float, nullable=True)
-    trailing_stop = Column(Boolean, default=False)
-    commission = Column(Float, default=0)
-    notes = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    closed_at = Column(DateTime, nullable=True)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=True)
-    
-    # Добавляем связь с User
-    user = relationship("User", back_populates="trades")
-    
-    def calculate_profit(self):
-        """Расчет прибыли"""
-        if self.exit_price and self.entry_price:
-            if self.side == OrderSide.BUY:
-                self.profit = (self.exit_price - self.entry_price) * self.quantity - self.commission
-            else:
-                self.profit = (self.entry_price - self.exit_price) * self.quantity - self.commission
-            
-            self.profit_percent = (self.profit / (self.entry_price * self.quantity)) * 100
-        return self.profit
+class OrderType(str, Enum):
+    """Тип ордера"""
+    MARKET = "MARKET"
+    LIMIT = "LIMIT"
+    STOP_LOSS = "STOP_LOSS"
+    TAKE_PROFIT = "TAKE_PROFIT"
 
-class Signal(Base):
-    __tablename__ = "signals"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    symbol = Column(String(20), nullable=False, index=True)
-    action = Column(String(10), nullable=False)
-    confidence = Column(Float, nullable=False)
-    price = Column(Float, nullable=False)
-    stop_loss = Column(Float, nullable=True)
-    take_profit = Column(Float, nullable=True)
-    strategy = Column(String(50), nullable=False)
-    reason = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    executed = Column(Boolean, default=False)
-    executed_at = Column(DateTime, nullable=True)
-    trade_id = Column(Integer, ForeignKey('trades.id'), nullable=True)
+class SignalAction(str, Enum):
+    """Действие сигнала"""
+    BUY = "BUY"
+    SELL = "SELL"
+    HOLD = "HOLD"
 
-class User(Base):
-    __tablename__ = "users"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(50), unique=True, index=True, nullable=False)
-    hashed_password = Column(String(128), nullable=False)
-    email = Column(String(100), nullable=True)
-    is_active = Column(Boolean, default=True)
-    is_admin = Column(Boolean, default=False)
-    is_blocked = Column(Boolean, default=False)
-    failed_login_attempts = Column(Integer, default=0)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    last_login = Column(DateTime, nullable=True)
-    blocked_at = Column(DateTime, nullable=True)
-    
-    trades = relationship("Trade", back_populates="user")
+# ===== МОДЕЛИ =====
 
-class TradingPair(Base):
-    __tablename__ = "trading_pairs"
+class MarketCondition(Base):
+    """Состояние рынка"""
+    __tablename__ = 'market_conditions'
     
-    id = Column(Integer, primary_key=True, index=True)
-    symbol = Column(String(20), unique=True, index=True, nullable=False)
-    is_active = Column(Boolean, default=True)
-    min_position_size = Column(Float, nullable=True)
-    max_position_size = Column(Float, nullable=True)
-    stop_loss_percent = Column(Float, default=2.0)
-    take_profit_percent = Column(Float, default=4.0)
-    strategy = Column(String(50), default='multi_indicator')
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    id = Column(Integer, primary_key=True)
+    symbol = Column(String(20), nullable=False)
+    timeframe = Column(String(20), nullable=False)
+    condition_type = Column(String(50), nullable=False)
+    condition_value = Column(String(50), nullable=False)
+    strength = Column(Float)
+    indicators = Column(JSON)
+    timestamp = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, default=func.current_timestamp())
+    
+    __table_args__ = (
+        Index('idx_symbol_timestamp', 'symbol', 'timestamp'),
+        Index('idx_condition_type', 'condition_type'),
+    )
+
 
 class BotState(Base):
-    __tablename__ = "bot_state"
+    """Состояние торгового бота"""
+    __tablename__ = 'bot_state'
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
+    bot_name = Column(String(50), nullable=False, default='main')
+    status = Column(String(20), nullable=False, default='stopped')
     is_running = Column(Boolean, default=False)
-    start_time = Column(DateTime, nullable=True)
-    stop_time = Column(DateTime, nullable=True)
-    total_trades = Column(Integer, default=0)
-    profitable_trades = Column(Integer, default=0)
-    total_profit = Column(Float, default=0)
-    current_balance = Column(Float, default=0)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
-class Balance(Base):
-    __tablename__ = "balances"
+    last_heartbeat = Column(DateTime, default=func.now())
+    started_at = Column(DateTime)
+    stopped_at = Column(DateTime)
     
-    id = Column(Integer, primary_key=True, index=True)
-    currency = Column(String(10), nullable=False)
-    total = Column(Float, nullable=False)
-    free = Column(Float, nullable=False)
-    used = Column(Float, nullable=False)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    # Статистика
+    total_trades = Column(Integer, default=0)
+    successful_trades = Column(Integer, default=0)
+    failed_trades = Column(Integer, default=0)
+    total_profit = Column(Float, default=0.0)
+    
+    # Конфигурация
+    active_strategy = Column(String(50))
+    trading_pairs = Column(JSON)
+    config = Column(JSON)
+    
+    # Состояние
+    error_message = Column(Text)
+    last_error_at = Column(DateTime)
+    
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+    
+    def __repr__(self):
+        return f"<BotState(bot_name='{self.bot_name}', status='{self.status}', is_running={self.is_running})>"
+
+class MLPrediction(Base):
+    """ML предсказания"""
+    __tablename__ = 'ml_predictions'
+    
+    id = Column(Integer, primary_key=True)
+    model_id = Column(Integer, ForeignKey('ml_models.id'), nullable=False)
+    symbol = Column(String(20), nullable=False)
+    prediction_type = Column(String(50), nullable=False)
+    prediction_value = Column(JSON, nullable=False)
+    confidence = Column(Float, nullable=False)
+    features_snapshot = Column(JSON)
+    actual_outcome = Column(JSON)
+    created_at = Column(DateTime, default=func.current_timestamp())
+    
+    __table_args__ = (
+        Index('idx_model_symbol', 'model_id', 'symbol'),
+        Index('idx_created_at', 'created_at'),
+    )
+
+# Дополнительные модели для полноты
+
+class Order(Base):
+    """Ордера на бирже"""
+    __tablename__ = 'orders'
+    
+    id = Column(Integer, primary_key=True)
+    exchange_order_id = Column(String(100), unique=True)
+    symbol = Column(String(20), nullable=False)
+    side = Column(String(10), nullable=False)
+    order_type = Column(String(20), nullable=False)
+    price = Column(Float)
+    quantity = Column(Float, nullable=False)
+    filled_quantity = Column(Float, default=0)
+    status = Column(String(20), nullable=False)
+    created_at = Column(DateTime, default=func.current_timestamp())
+    updated_at = Column(DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
+    trade_id = Column(Integer, ForeignKey('trades.id'))
 
 class BotSettings(Base):
-    __tablename__ = "bot_settings"
+    """Настройки бота"""
+    __tablename__ = 'bot_settings'
     
-    id = Column(Integer, primary_key=True, index=True)
-    key = Column(String(50), unique=True, index=True, nullable=False)
-    value = Column(Text, nullable=True)
-    description = Column(Text, nullable=True)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    id = Column(Integer, primary_key=True)
+    key = Column(String(50), nullable=False, unique=True)
+    value = Column(Text)
+    updated_at = Column(DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
+    description = Column(Text)
+    
+    __table_args__ = (
+        Index('idx_key', 'key'),
+    )
+
+
+class Strategy(Base):
+    """Торговые стратегии"""
+    __tablename__ = 'strategies'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False, unique=True)
+    description = Column(Text)
+    is_active = Column(Boolean, default=True)
+    parameters = Column(JSON)
+    min_confidence = Column(Float, default=0.6)
+    max_positions = Column(Integer, default=1)
+    created_at = Column(DateTime, default=func.current_timestamp())
+    updated_at = Column(DateTime, default=func.current_timestamp(), onupdate=func.current_timestamp())
+    
+    __table_args__ = {'extend_existing': True}
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'is_active': self.is_active,
+            'parameters': self.parameters,
+            'min_confidence': self.min_confidence
+        }
+        
+class Candle:
+    """
+    Класс для представления торговой свечи (OHLCV данных)
+    
+    Этот класс НЕ является моделью БД - это обычный Python класс
+    для работы с рыночными данными в памяти.
+    
+    Attributes:
+        timestamp: Время свечи (Unix timestamp)
+        open: Цена открытия
+        high: Максимальная цена  
+        low: Минимальная цена
+        close: Цена закрытия
+        volume: Объем торгов
+        symbol: Торговая пара (например, 'BTC/USDT')
+    """
+    timestamp: int  # Unix timestamp в миллисекундах
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: float
+    symbol: Optional[str] = None
+    
+    def __post_init__(self):
+        """
+        Проверка корректности данных свечи после создания
+        
+        Эта функция автоматически вызывается после __init__
+        и помогает избежать некорректных данных
+        """
+        # Проверяем логику цен
+        if self.high < max(self.open, self.close, self.low):
+            raise ValueError(f"High ({self.high}) должен быть >= max(open, close, low)")
+        
+        if self.low > min(self.open, self.close, self.high):
+            raise ValueError(f"Low ({self.low}) должен быть <= min(open, close, high)")
+        
+        # Проверяем положительность объема
+        if self.volume < 0:
+            raise ValueError(f"Volume ({self.volume}) не может быть отрицательным")
+        
+        # Проверяем положительность цен
+        if any(price <= 0 for price in [self.open, self.high, self.low, self.close]):
+            raise ValueError("Все цены должны быть положительными")
+    
+    @classmethod
+    def from_ccxt(cls, ohlcv_data: List[float], symbol: Optional[str] = None) -> 'Candle':
+        """
+        Создание свечи из данных CCXT библиотеки
+        
+        Args:
+            ohlcv_data: Список [timestamp, open, high, low, close, volume]
+            symbol: Символ торговой пары
+            
+        Returns:
+            Объект Candle
+            
+        Example:
+            # Данные от биржи через CCXT
+            ccxt_data = [1640995200000, 47000.0, 47500.0, 46800.0, 47200.0, 123.45]
+            candle = Candle.from_ccxt(ccxt_data, "BTC/USDT")
+        """
+        if len(ohlcv_data) < 6:
+            raise ValueError(f"CCXT данные должны содержать 6 элементов, получено: {len(ohlcv_data)}")
+        
+        return cls(
+            timestamp=int(ohlcv_data[0]),
+            open=float(ohlcv_data[1]),
+            high=float(ohlcv_data[2]),
+            low=float(ohlcv_data[3]),
+            close=float(ohlcv_data[4]),
+            volume=float(ohlcv_data[5]),
+            symbol=symbol
+        )
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any], symbol: Optional[str] = None) -> 'Candle':
+        """
+        Создание свечи из словаря
+        
+        Args:
+            data: Словарь с ключами: timestamp, open, high, low, close, volume
+            symbol: Символ торговой пары
+            
+        Returns:
+            Объект Candle
+        """
+        required_keys = ['timestamp', 'open', 'high', 'low', 'close', 'volume']
+        missing_keys = [key for key in required_keys if key not in data]
+        
+        if missing_keys:
+            raise ValueError(f"Отсутствуют обязательные ключи: {missing_keys}")
+        
+        return cls(
+            timestamp=int(data['timestamp']),
+            open=float(data['open']),
+            high=float(data['high']),
+            low=float(data['low']),
+            close=float(data['close']),
+            volume=float(data['volume']),
+            symbol=symbol or data.get('symbol')
+        )
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """
+        Преобразование свечи в словарь
+        
+        Returns:
+            Словарь с данными свечи
+        """
+        return {
+            'timestamp': self.timestamp,
+            'open': self.open,
+            'high': self.high,
+            'low': self.low,
+            'close': self.close,
+            'volume': self.volume,
+            'symbol': self.symbol
+        }
+    
+    def to_pandas_row(self) -> Dict[str, Any]:
+        """
+        Преобразование в формат для pandas DataFrame
+        
+        Returns:
+            Словарь для добавления в DataFrame
+        """
+        return {
+            'timestamp': pd.to_datetime(self.timestamp, unit='ms'),
+            'open': self.open,
+            'high': self.high,
+            'low': self.low,
+            'close': self.close,
+            'volume': self.volume
+        }
+    
+    @property
+    def datetime(self) -> datetime:
+        """
+        Получение объекта datetime из timestamp
+        
+        Returns:
+            Объект datetime
+        """
+        return datetime.fromtimestamp(self.timestamp / 1000)
+    
+    @property
+    def body_size(self) -> float:
+        """
+        Размер тела свечи (разница между open и close)
+        
+        Returns:
+            Абсолютный размер тела свечи
+        """
+        return abs(self.close - self.open)
+    
+    @property
+    def upper_shadow(self) -> float:
+        """
+        Размер верхней тени свечи
+        
+        Returns:
+            Размер верхней тени
+        """
+        return self.high - max(self.open, self.close)
+    
+    @property
+    def lower_shadow(self) -> float:
+        """
+        Размер нижней тени свечи
+        
+        Returns:
+            Размер нижней тени
+        """
+        return min(self.open, self.close) - self.low
+    
+    @property
+    def is_bullish(self) -> bool:
+        """
+        Проверка, является ли свеча бычьей (растущей)
+        
+        Returns:
+            True если close > open
+        """
+        return self.close > self.open
+    
+    @property
+    def is_bearish(self) -> bool:
+        """
+        Проверка, является ли свеча медвежьей (падающей)
+        
+        Returns:
+            True если close < open
+        """
+        return self.close < self.open
+    
+    @property
+    def is_doji(self) -> bool:
+        """
+        Проверка, является ли свеча доджи (open ≈ close)
+        
+        Returns:
+            True если разница между open и close < 0.1% от цены
+        """
+        return self.body_size / max(self.open, self.close) < 0.001
+    
+    def __str__(self) -> str:
+        """Строковое представление свечи"""
+        direction = "📈" if self.is_bullish else "📉" if self.is_bearish else "🔄"
+        return (f"Candle {direction} {self.symbol or 'Unknown'} "
+                f"[O:{self.open:.2f} H:{self.high:.2f} L:{self.low:.2f} C:{self.close:.2f} V:{self.volume:.2f}]")
+    
+    def __repr__(self) -> str:
+        """Техническое представление свечи"""
+        return (f"Candle(timestamp={self.timestamp}, open={self.open}, "
+                f"high={self.high}, low={self.low}, close={self.close}, "
+                f"volume={self.volume}, symbol='{self.symbol}')")
+
+# Экспорт всех моделей
+# Обновите список экспорта в конце файла
+__all__ = [
+    'Base',
+    'Candle',  # ← Добавьте эту строку
+    'BotState',
+    'User',
+    'Trade',
+    'Signal',
+    'Balance',
+    'TradingPair',
+    'MarketCondition',
+    'MLModel',
+    'MLPrediction',
+    'TradingLog',
+    'Order',
+    'BotSettings',
+    'Strategy',
+    'TradeStatus',
+    'OrderSide',
+    'OrderType',
+    'SignalAction'
+]
+
+class TradingLog(Base):
+    """Логи торговых операций"""
+    __tablename__ = 'trading_logs'
+    
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, default=func.now())
+    level = Column(String(20))  # INFO, WARNING, ERROR
+    category = Column(String(50))  # trade, signal, risk, etc
+    message = Column(Text)
+    
+    # Связанные данные
+    trade_id = Column(Integer, ForeignKey('trades.id'))
+    signal_id = Column(Integer, ForeignKey('signals.id'))
+    symbol = Column(String(20))
+    
+    # Дополнительная информация
+    details = Column(JSON)
+    
+    # Отношения
+    trade = relationship("Trade", back_populates="logs")
+    signal = relationship("Signal", back_populates="logs")
+    
+    def __repr__(self):
+        return f"<TradingLog(timestamp={self.timestamp}, level='{self.level}', category='{self.category}')>"

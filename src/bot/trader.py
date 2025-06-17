@@ -1,17 +1,32 @@
 """
-Модуль для исполнения торговых операций
-Путь: /var/www/www-root/data/www/systemetech.ru/src/bot/trader.py
+Улучшенный исполнитель сделок с интеграцией ML
+Путь: src/bot/enhanced_executor.py
 """
-import logging
-from typing import Dict, Any, List, Optional, Tuple
+import asyncio
 from datetime import datetime
+from typing import Dict, Any, Optional, List, Tuple
+import numpy as np
 
-from ..core.models import Trade, Signal, OrderSide, TradeStatus
+# Импорты из вашего проекта
+from ..core.models import Trade, Signal, Order
 from ..core.database import SessionLocal
 from ..core.config import config
 from ..exchange.client import ExchangeClient
 
-logger = logging.getLogger(__name__)
+# ML модули
+from ..ml.strategy_selector import MLStrategySelector
+from ..ml.models.regressor import PriceLevelRegressor
+from ..ml.models.reinforcement import TradingRLAgent
+from ..ml.features.feature_engineering import FeatureEngineering
+
+# Модули анализа
+from ..analysis.news.impact_scorer import NewsImpactScorer
+# from ..analysis.social.signal_extractor import SocialSignalExtractor  # Будет создан позже
+
+# Логирование
+from ..logging.smart_logger import SmartLogger
+
+logger = SmartLogger(__name__)
 
 class Trader:
     """Класс для исполнения торговых операций"""
