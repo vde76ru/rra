@@ -1,5 +1,5 @@
 """
-Flask веб-приложение для Crypto Trading Bot - ПОЛНОСТЬЮ ИСПРАВЛЕННАЯ ВЕРСИЯ С ГРАФИКАМИ
+Flask веб-приложение для Crypto Trading Bot - ИСПРАВЛЕННАЯ ВЕРСИЯ БЕЗ ДУБЛИРОВАНИЯ РОУТОВ
 Файл: src/web/app.py
 """
 import os
@@ -240,7 +240,7 @@ def create_app():
         """Страница настроек"""
         return render_template('settings.html')
     
-    # ===== ОСНОВНЫЕ API ENDPOINTS =====
+    # ===== API ENDPOINTS =====
     
     @app.route('/api/status')
     @login_required
@@ -332,8 +332,6 @@ def create_app():
                 'message': str(e)
             }), 500
     
-    # === API ДЛЯ ГРАФИКОВ ===
-    
     @app.route('/api/bot/status')
     @login_required
     def api_bot_status():
@@ -368,11 +366,13 @@ def create_app():
                 'error': str(e)
             }), 500
     
+    # === ОСНОВНЫЕ API РОУТЫ (БЕЗ ДУБЛИРОВАНИЯ) ===
+    
     @app.route('/api/balance')
     @login_required
     @async_route
-    async def get_balance_api():
-        """Получить баланс"""
+    async def main_balance_api():
+        """Получить баланс - основной роут"""
         try:
             if not exchange_client:
                 # Возвращаем тестовые данные
@@ -402,8 +402,8 @@ def create_app():
     
     @app.route('/api/trades')
     @login_required
-    def get_trades_api():
-        """Получить список сделок"""
+    def main_trades_api():
+        """Получить список сделок - основной роут"""
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 20, type=int)
         
@@ -424,18 +424,6 @@ def create_app():
             })
         finally:
             db.close()
-    
-    # === РОУТЫ ДЛЯ ОБРАТНОЙ СОВМЕСТИМОСТИ ===
-    
-    @app.route('/api/balance')
-    def api_balance():
-        """Роут баланса для обратной совместимости"""
-        return redirect(url_for('get_balance_api'))
-    
-    @app.route('/api/trades')
-    def api_trades():
-        """Роут сделок для обратной совместимости"""
-        return redirect(url_for('get_trades_api'))
     
     @app.route('/api/signals')
     @login_required
