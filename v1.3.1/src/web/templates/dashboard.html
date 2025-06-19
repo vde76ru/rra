@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+
+{% block title %}Дашборд - Crypto Trading Bot{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Статистика в шапке -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Статус бота</h5>
+                    <h3 id="bot-status-card">
+                        {% if bot_status %}
+                            <i class="fas fa-check-circle"></i> Работает
+                        {% else %}
+                            <i class="fas fa-times-circle"></i> Остановлен
+                        {% endif %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Всего сделок</h5>
+                    <h3>{{ total_trades }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Активные сделки</h5>
+                    <h3>{{ active_trades }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Баланс USDT</h5>
+                    <h3 id="balance-display">Загрузка...</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Управление ботом -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5><i class="fas fa-robot"></i> Управление ботом</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div id="bot-status-indicator" class="mb-3">
+                            <i class="fas fa-circle fa-3x {% if bot_status %}text-success{% else %}text-danger{% endif %}"></i>
+                        </div>
+                        <h4 id="bot-status-text">
+                            {% if bot_status %}Бот активен{% else %}Бот остановлен{% endif %}
+                        </h4>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button id="btn-start" class="btn btn-success btn-lg" {% if bot_status %}disabled{% endif %}>
+                            <i class="fas fa-play"></i> Запустить бота
+                        </button>
+                        <button id="btn-stop" class="btn btn-danger btn-lg" {% if not bot_status %}disabled{% endif %}>
+                            <i class="fas fa-stop"></i> Остановить бота
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- График баланса -->
+        <div class="col-md-8 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-line"></i> График баланса</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="balanceChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Последние сделки -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-list"></i> Последние сделки</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Время</th>
+                                    <th>Символ</th>
+                                    <th>Тип</th>
+                                    <th>Цена</th>
+                                    <th>Количество</th>
+                                    <th>Статус</th>
+                                    <th>Прибыль</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trades-table">
+                                {% for trade in recent_trades %}
+                                <tr>
+                                    <td>{{ trade.id }}</td>
+                                    <td>{{ trade.created_at.strftime('%Y-%m-%d %H:%M:%S') if trade.created_at else '-' }}</td>
+                                    <td>{{ trade.symbol }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if trade.side == 'BUY' %}success{% else %}danger{% endif %}">
+                                            {{ trade.side }}
+                                        </span>
+                                    </td>
+                                    <td>${{ "%.2f"|format(trade.price) if trade.price else '0' }}</td>
+                                    <td>{{ trade.quantity }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if trade.status == 'CLOSED' %}success{% elif trade.status == 'OPEN' %}primary{% else %}secondary{% endif %}">
+                                            {{ trade.status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if trade.profit %}
+                                            <span class="text-{% if trade.profit > 0 %}success{% else %}danger{% endif %}">
+                                                ${{ "%.2f"|format(trade.profit) }}
+                                            </span>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Уведомления -->
+<div id="notifications-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// WebSocket соединение
+const socket = io();
+
+// График баланса
+const ctx = document.getElementById('balanceChart').getContext('2d');
+const balanceChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: 'Баланс USDT',
+            data: [],
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: false
+            }
+        }
+    }
+});
+
+// Функция показа уведомлений
+function showNotification(message, type = 'info') {
+    const alertClass = {
+        'success': 'alert-success',
+        'error': 'alert-danger',
+        'warning': 'alert-warning',
+        'info': 'alert-info'
+    }[type];
+
+    const notification = $(`
+        <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `);
+
+    $('#notifications-container').append(notification);
+    
+    setTimeout(() => {
+        notification.alert('close');
+    }, 5000);
+}
+
+// Функция обновления статуса бота
+function updateBotStatus(isRunning) {
+    if (isRunning) {
+        $('#bot-status-card').html('<i class="fas fa-check-circle"></i> Работает');
+        $('#bot-status-indicator i').removeClass('text-danger').addClass('text-success');
+        $('#bot-status-text').text('Бот активен');
+        $('#btn-start').prop('disabled', true);
+        $('#btn-stop').prop('disabled', false);
+    } else {
+        $('#bot-status-card').html('<i class="fas fa-times-circle"></i> Остановлен');
+        $('#bot-status-indicator i').removeClass('text-success').addClass('text-danger');
+        $('#bot-status-text').text('Бот остановлен');
+        $('#btn-start').prop('disabled', false);
+        $('#btn-stop').prop('disabled', true);
+    }
+}
+
+// Функция загрузки баланса
+async function loadBalance() {
+    try {
+        const response = await fetch('/api/balance');
+        const data = await response.json();
+        
+        if (data.error) {
+            $('#balance-display').text('Ошибка');
+        } else {
+            $('#balance-display').text(`$${data.total_usdt.toFixed(2)}`);
+            
+            // Добавляем точку на график
+            const now = new Date().toLocaleTimeString();
+            balanceChart.data.labels.push(now);
+            balanceChart.data.datasets[0].data.push(data.total_usdt);
+            
+            // Ограничиваем количество точек
+            if (balanceChart.data.labels.length > 20) {
+                balanceChart.data.labels.shift();
+                balanceChart.data.datasets[0].data.shift();
+            }
+            
+            balanceChart.update();
+        }
+    } catch (error) {
+        console.error('Ошибка загрузки баланса:', error);
+        $('#balance-display').text('Ошибка');
+    }
+}
+
+// Обработчики кнопок
+$('#btn-start').click(async function() {
+    $(this).prop('disabled', true);
+    showNotification('Запуск бота...', 'info');
+    
+    try {
+        const response = await fetch('/api/bot/start', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Бот успешно запущен!', 'success');
+            updateBotStatus(true);
+        } else {
+            showNotification(`Ошибка: ${data.message}`, 'error');
+            $(this).prop('disabled', false);
+        }
+    } catch (error) {
+        showNotification('Ошибка запуска бота', 'error');
+        $(this).prop('disabled', false);
+    }
+});
+
+$('#btn-stop').click(async function() {
+    $(this).prop('disabled', true);
+    showNotification('Остановка бота...', 'info');
+    
+    try {
+        const response = await fetch('/api/bot/stop', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('Бот успешно остановлен!', 'success');
+            updateBotStatus(false);
+        } else {
+            showNotification(`Ошибка: ${data.message}`, 'error');
+            $(this).prop('disabled', false);
+        }
+    } catch (error) {
+        showNotification('Ошибка остановки бота', 'error');
+        $(this).prop('disabled', false);
+    }
+});
+
+// WebSocket обработчики
+socket.on('connect', function() {
+    console.log('WebSocket подключен');
+});
+
+socket.on('bot_status', function(data) {
+    updateBotStatus(data.status === 'running');
+});
+
+socket.on('new_trade', function(data) {
+    showNotification(`Новая сделка: ${data.symbol} ${data.side}`, 'info');
+    // Здесь можно обновить таблицу сделок
+});
+
+socket.on('balance_update', function(data) {
+    $('#balance-display').text(`$${data.total_usdt.toFixed(2)}`);
+});
+
+// Загружаем баланс при старте
+$(document).ready(function() {
+    loadBalance();
+    
+    // Обновляем баланс каждые 30 секунд
+    setInterval(loadBalance, 30000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,423 @@
+#!/usr/bin/env python3
+"""
+Система управления компонентами бота
+Файл: src/core/component_system.py
+
+Этот модуль отвечает за правильную инициализацию всех компонентов системы
+с учетом зависимостей и обработкой ошибок.
+"""
+
+import logging
+import asyncio
+from typing import Dict, Any, List, Optional, Callable, Set
+from enum import Enum
+from dataclasses import dataclass
+from datetime import datetime
+
+logger = logging.getLogger(__name__)
+
+class ComponentStatus(Enum):
+    """Статусы компонентов"""
+    NOT_INITIALIZED = "not_initialized"
+    INITIALIZING = "initializing"
+    READY = "ready"
+    FAILED = "failed"
+    DISABLED = "disabled"
+
+@dataclass
+class ComponentInfo:
+    """Информация о компоненте"""
+    name: str
+    status: ComponentStatus
+    instance: Any = None
+    error: Optional[str] = None
+    dependencies: List[str] = None
+    is_critical: bool = False
+    retry_count: int = 0
+    max_retries: int = 3
+    
+    def __post_init__(self):
+        if self.dependencies is None:
+            self.dependencies = []
+
+class ComponentManager:
+    """
+    Менеджер компонентов для системы бота
+    
+    Обеспечивает:
+    - Правильный порядок инициализации
+    - Обработку зависимостей
+    - Graceful degradation при ошибках
+    - Возможность перезапуска компонентов
+    """
+    
+    def __init__(self):
+        self.components: Dict[str, ComponentInfo] = {}
+        self.initialization_order: List[str] = []
+        self._lock = asyncio.Lock()
+        
+    def register_component(
+        self,
+        name: str,
+        initializer: Callable,
+        dependencies: List[str] = None,
+        is_critical: bool = False,
+        max_retries: int = 3
+    ):
+        """
+        Регистрация компонента
+        
+        Args:
+            name: Имя компонента
+            initializer: Функция инициализации
+            dependencies: Список зависимостей
+            is_critical: Критичность компонента
+            max_retries: Максимальное количество попыток
+        """
+        if dependencies is None:
+            dependencies = []
+            
+        self.components[name] = ComponentInfo(
+            name=name,
+            status=ComponentStatus.NOT_INITIALIZED,
+            dependencies=dependencies,
+            is_critical=is_critical,
+            max_retries=max_retries
+        )
+        
+        # Сохраняем функцию инициализации
+        setattr(self, f"_init_{name}", initializer)
+        
+        logger.debug(f"📝 Зарегистрирован компонент: {name}")
+    
+    def _resolve_dependencies(self) -> List[str]:
+        """
+        Определение правильного порядка инициализации
+        
+        Returns:
+            List[str]: Порядок инициализации компонентов
+        """
+        # Топологическая сортировка для разрешения зависимостей
+        visited = set()
+        temp_visited = set()
+        order = []
+        
+        def visit(component_name: str):
+            if component_name in temp_visited:
+                raise ValueError(f"Циклическая зависимость обнаружена: {component_name}")
+            
+            if component_name not in visited:
+                temp_visited.add(component_name)
+                
+                component = self.components.get(component_name)
+                if component:
+                    for dep in component.dependencies:
+                        if dep in self.components:
+                            visit(dep)
+                
+                temp_visited.remove(component_name)
+                visited.add(component_name)
+                order.append(component_name)
+        
+        # Посещаем все компоненты
+        for component_name in self.components:
+            if component_name not in visited:
+                visit(component_name)
+        
+        return order
+    
+    async def initialize_all(self) -> Dict[str, bool]:
+        """
+        Инициализация всех компонентов в правильном порядке
+        
+        Returns:
+            Dict[str, bool]: Результат инициализации каждого компонента
+        """
+        async with self._lock:
+            logger.info("🚀 Начинаем инициализацию всех компонентов...")
+            
+            # Определяем порядок инициализации
+            try:
+                self.initialization_order = self._resolve_dependencies()
+                logger.info(f"📋 Порядок инициализации: {self.initialization_order}")
+            except ValueError as e:
+                logger.error(f"❌ Ошибка разрешения зависимостей: {e}")
+                return {}
+            
+            results = {}
+            
+            # Инициализируем компоненты по порядку
+            for component_name in self.initialization_order:
+                result = await self._initialize_component(component_name)
+                results[component_name] = result
+                
+                # Если критичный компонент не инициализировался, останавливаемся
+                component = self.components[component_name]
+                if component.is_critical and not result:
+                    logger.error(f"❌ Критичный компонент {component_name} не инициализирован")
+                    break
+            
+            # Выводим итоговую статистику
+            self._log_initialization_summary(results)
+            return results
+    
+    async def _initialize_component(self, name: str) -> bool:
+        """
+        Инициализация конкретного компонента
+        
+        Args:
+            name: Имя компонента
+            
+        Returns:
+            bool: Успешность инициализации
+        """
+        component = self.components.get(name)
+        if not component:
+            logger.error(f"❌ Компонент {name} не найден")
+            return False
+        
+        # Проверяем зависимости
+        for dep in component.dependencies:
+            dep_component = self.components.get(dep)
+            if not dep_component or dep_component.status != ComponentStatus.READY:
+                logger.error(f"❌ Зависимость {dep} для {name} не готова")
+                component.status = ComponentStatus.FAILED
+                component.error = f"Dependency {dep} not ready"
+                return False
+        
+        # Пытаемся инициализировать
+        for attempt in range(component.max_retries):
+            try:
+                logger.info(f"🔧 Инициализируем {name} (попытка {attempt + 1}/{component.max_retries})")
+                component.status = ComponentStatus.INITIALIZING
+                
+                # Получаем функцию инициализации
+                initializer = getattr(self, f"_init_{name}", None)
+                if not initializer:
+                    raise AttributeError(f"Initializer for {name} not found")
+                
+                # Выполняем инициализацию
+                if asyncio.iscoroutinefunction(initializer):
+                    instance = await initializer()
+                else:
+                    instance = initializer()
+                
+                # Успешная инициализация
+                component.instance = instance
+                component.status = ComponentStatus.READY
+                component.error = None
+                component.retry_count = attempt + 1
+                
+                logger.info(f"✅ Компонент {name} инициализирован успешно")
+                return True
+                
+            except Exception as e:
+                error_msg = f"Ошибка инициализации {name}: {str(e)}"
+                logger.warning(f"⚠️ {error_msg}")
+                component.error = error_msg
+                component.retry_count = attempt + 1
+                
+                # Если это последняя попытка
+                if attempt == component.max_retries - 1:
+                    component.status = ComponentStatus.FAILED
+                    logger.error(f"❌ Компонент {name} не удалось инициализировать после {component.max_retries} попыток")
+                    return False
+                
+                # Ждем перед следующей попыткой
+                await asyncio.sleep(1)
+        
+        return False
+    
+    def get_component(self, name: str) -> Any:
+        """
+        Получение экземпляра компонента
+        
+        Args:
+            name: Имя компонента
+            
+        Returns:
+            Any: Экземпляр компонента или None
+        """
+        component = self.components.get(name)
+        if component and component.status == ComponentStatus.READY:
+            return component.instance
+        return None
+    
+    def get_status(self) -> Dict[str, Dict[str, Any]]:
+        """
+        Получение статуса всех компонентов
+        
+        Returns:
+            Dict: Статус каждого компонента
+        """
+        status = {}
+        for name, component in self.components.items():
+            status[name] = {
+                'status': component.status.value,
+                'is_critical': component.is_critical,
+                'dependencies': component.dependencies,
+                'retry_count': component.retry_count,
+                'error': component.error,
+                'has_instance': component.instance is not None
+            }
+        return status
+    
+    async def restart_component(self, name: str) -> bool:
+        """
+        Перезапуск компонента
+        
+        Args:
+            name: Имя компонента
+            
+        Returns:
+            bool: Успешность перезапуска
+        """
+        component = self.components.get(name)
+        if not component:
+            return False
+        
+        logger.info(f"🔄 Перезапускаем компонент: {name}")
+        
+        # Сбрасываем состояние
+        component.status = ComponentStatus.NOT_INITIALIZED
+        component.instance = None
+        component.error = None
+        component.retry_count = 0
+        
+        # Инициализируем заново
+        return await self._initialize_component(name)
+    
+    def is_ready(self, component_name: str) -> bool:
+        """
+        Проверка готовности компонента
+        
+        Args:
+            component_name: Имя компонента
+            
+        Returns:
+            bool: True если компонент готов к работе
+        """
+        if component_name not in self.components:
+            logger.warning(f"⚠️ Компонент {component_name} не зарегистрирован")
+            return False
+        
+        component = self.components[component_name]
+        is_ready = component.status == ComponentStatus.READY
+        
+        if not is_ready:
+            logger.debug(f"🔍 Компонент {component_name} не готов. Статус: {component.status.value}")
+        
+        return is_ready
+
+    def get_component_status(self, component_name: str) -> ComponentStatus:
+        """
+        Получение статуса компонента
+        
+        Args:
+            component_name: Имя компонента
+            
+        Returns:
+            ComponentStatus: Статус компонента
+        """
+        if component_name not in self.components:
+            return ComponentStatus.NOT_INITIALIZED
+        
+        return self.components[component_name].status
+
+    def is_component_critical(self, component_name: str) -> bool:
+        """
+        Проверка критичности компонента
+        
+        Args:
+            component_name: Имя компонента
+            
+        Returns:
+            bool: True если компонент критичен
+        """
+        if component_name not in self.components:
+            return False
+        
+        return self.components[component_name].is_critical
+
+    def get_failed_critical_components(self) -> List[str]:
+        """
+        Получение списка упавших критичных компонентов
+        
+        Returns:
+            List[str]: Список имен упавших критичных компонентов
+        """
+        failed_critical = []
+        
+        for name, component in self.components.items():
+            if component.is_critical and component.status == ComponentStatus.FAILED:
+                failed_critical.append(name)
+        
+        return failed_critical
+
+    def get_status_summary(self) -> Dict[str, Any]:
+        """
+        Получение сводки по статусам всех компонентов
+        
+        Returns:
+            Dict: Сводная информация о статусах
+        """
+        summary = {
+            'total': len(self.components),
+            'ready': 0,
+            'failed': 0,
+            'initializing': 0,
+            'not_initialized': 0,
+            'disabled': 0,
+            'critical_failed': 0
+        }
+        
+        for component in self.components.values():
+            if component.status == ComponentStatus.READY:
+                summary['ready'] += 1
+            elif component.status == ComponentStatus.FAILED:
+                summary['failed'] += 1
+                if component.is_critical:
+                    summary['critical_failed'] += 1
+            elif component.status == ComponentStatus.INITIALIZING:
+                summary['initializing'] += 1
+            elif component.status == ComponentStatus.NOT_INITIALIZED:
+                summary['not_initialized'] += 1
+            elif component.status == ComponentStatus.DISABLED:
+                summary['disabled'] += 1
+        
+        return summary
+    
+    def _log_initialization_summary(self, results: Dict[str, bool]):
+        """
+        Вывод итоговой статистики инициализации
+        
+        Args:
+            results: Результаты инициализации
+        """
+        total = len(results)
+        success = sum(1 for r in results.values() if r)
+        failed = total - success
+        
+        logger.info("=" * 50)
+        logger.info("📊 ИТОГИ ИНИЦИАЛИЗАЦИИ КОМПОНЕНТОВ")
+        logger.info("=" * 50)
+        logger.info(f"📈 Всего компонентов: {total}")
+        logger.info(f"✅ Успешно: {success}")
+        logger.info(f"❌ Не удалось: {failed}")
+        logger.info("=" * 50)
+        
+        # Детальная информация
+        for name, success in results.items():
+            component = self.components[name]
+            status_icon = "✅" if success else "❌"
+            critical_icon = "🔥" if component.is_critical else "📦"
+            
+            logger.info(f"{status_icon} {critical_icon} {name}")
+            if not success and component.error:
+                logger.info(f"    └─ Ошибка: {component.error}")
+        
+        logger.info("=" * 50)
+
+
+# Глобальный менеджер компонентов
+component_manager = ComponentManager()

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Графики - Crypto Trading Bot</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #1e222d;
+            --bg-secondary: #131722;
+            --bg-tertiary: #2a2e39;
+            --border-color: #363a45;
+            --text-primary: #d1d4dc;
+            --text-muted: #868993;
+            --success-color: #26a69a;
+            --danger-color: #ef5350;
+            --warning-color: #ffc107;
+            --info-color: #2196f3;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--bg-secondary) !important;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .navbar-brand {
+            font-weight: 600;
+        }
+        
+        /* Панель управления */
+        .control-panel {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .symbol-selector, .timeframe-btn, .update-interval-select {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .symbol-selector:focus, .update-interval-select:focus {
+            background-color: var(--bg-tertiary);
+            border-color: var(--info-color);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 0.2rem rgba(33, 150, 243, 0.25);
+        }
+        
+        .timeframe-btn {
+            cursor: pointer;
+            margin: 0 2px;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .timeframe-btn:hover {
+            background-color: var(--info-color);
+            border-color: var(--info-color);
+            color: white;
+        }
+        
+        .timeframe-btn.active {
+            background-color: var(--info-color);
+            border-color: var(--info-color);
+            color: white;
+        }
+        
+        /* Индикаторы */
+        .indicators-panel {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .indicator-item {
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .indicator-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+        
+        .indicator-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .indicator-positive { color: var(--success-color); }
+        .indicator-negative { color: var(--danger-color); }
+        .indicator-neutral { color: var(--text-primary); }
+        
+        /* Графики */
+        .chart-container {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .chart-header {
+            background-color: var(--bg-tertiary);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .chart-body {
+            padding: 20px;
+        }
+        
+        .tradingview-container {
+            height: 600px;
+            position: relative;
+        }
+        
+        .small-chart-container {
+            height: 350px;
+            position: relative;
+        }
+        
+        /* Карточки */
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+        
+        .card-header {
+            background-color: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .card-body {
+            background-color: var(--bg-secondary);
+        }
+        
+        /* Таблица сделок */
+        .table-dark {
+            --bs-table-bg: transparent;
+            --bs-table-striped-bg: rgba(255, 255, 255, 0.05);
+            --bs-table-hover-bg: rgba(255, 255, 255, 0.075);
+        }
+        
+        .table-dark th {
+            border-color: var(--border-color);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        
+        .table-dark td {
+            border-color: var(--border-color);
+            vertical-align: middle;
+        }
+        
+        /* Статистика */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Статус индикаторы */
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background-color: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+        
+        .status-offline {
+            background-color: var(--danger-color);
+        }
+        
+        .status-loading {
+            background-color: var(--warning-color);
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+            max-width: 500px;
+        }
+        
+        /* Кнопки */
+        .btn-outline-light {
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        
+        .btn-outline-light:hover {
+            background-color: var(--text-primary);
+            border-color: var(--text-primary);
+            color: var(--bg-primary);
+        }
+        
+        /* Загрузка */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            flex-direction: column;
+        }
+        
+        .spinner-border {
+            color: var(--info-color);
+        }
+        
+        /* Отзывчивость */
+        @media (max-width: 768px) {
+            .container-fluid {
+                padding: 10px;
+            }
+            
+            .control-panel {
+                padding: 15px;
+            }
+            
+            .indicators-panel {
+                padding: 15px;
+            }
+            
+            .indicator-item {
+                margin-bottom: 15px;
+            }
+            
+            .tradingview-container {
+                height: 400px;
+            }
+            
+            .timeframe-btn {
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-chart-line"></i> Crypto Trading Bot
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-tachometer-alt"></i> Дашборд
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/charts">
+                            <i class="fas fa-chart-area"></i> Графики
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/analytics">
+                            <i class="fas fa-analytics"></i> Аналитика
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/settings">
+                            <i class="fas fa-cog"></i> Настройки
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <span class="navbar-text">
+                            <span class="status-indicator status-loading" id="connectionStatus"></span>
+                            <span id="connectionText">Подключение...</span>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <!-- Статистика -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value text-success" id="totalBalance">$0.00</div>
+                <div class="stat-label">Общий баланс</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="pnlToday">$0.00</div>
+                <div class="stat-label">P&L сегодня</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="openPositions">0</div>
+                <div class="stat-label">Открытых позиций</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tradesToday">0</div>
+                <div class="stat-label">Сделок сегодня</div>
+            </div>
+        </div>
+
+        <!-- Панель управления -->
+        <div class="control-panel">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <label class="form-label">Торговая пара</label>
+                    <select id="symbolSelector" class="symbol-selector form-select">
+                        <option value="BTCUSDT">BTC/USDT</option>
+                        <option value="ETHUSDT">ETH/USDT</option>
+                        <option value="BNBUSDT">BNB/USDT</option>
+                        <option value="SOLUSDT">SOL/USDT</option>
+                        <option value="ADAUSDT">ADA/USDT</option>
+                        <option value="XRPUSDT">XRP/USDT</option>
+                        <option value="DOTUSDT">DOT/USDT</option>
+                        <option value="AVAXUSDT">AVAX/USDT</option>
+                        <option value="LINKUSDT">LINK/USDT</option>
+                        <option value="MATICUSDT">MATIC/USDT</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Таймфрейм</label>
+                    <div class="btn-group w-100" role="group">
+                        <button class="timeframe-btn" data-timeframe="1m">1m</button>
+                        <button class="timeframe-btn" data-timeframe="5m">5m</button>
+                        <button class="timeframe-btn" data-timeframe="15m">15m</button>
+                        <button class="timeframe-btn active" data-timeframe="1h">1h</button>
+                        <button class="timeframe-btn" data-timeframe="4h">4h</button>
+                        <button class="timeframe-btn" data-timeframe="1d">1D</button>
+                        <button class="timeframe-btn" data-timeframe="1w">1W</button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Автообновление</label>
+                    <select id="updateInterval" class="update-interval-select form-select">
+                        <option value="5">5 сек</option>
+                        <option value="10">10 сек</option>
+                        <option value="30" selected>30 сек</option>
+                        <option value="60">1 мин</option>
+                        <option value="300">5 мин</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <button id="refreshChartsBtn" class="btn btn-outline-light btn-sm me-2">
+                        <i class="fas fa-sync-alt"></i> Обновить
+                    </button>
+                    <button id="fullscreenBtn" class="btn btn-outline-light btn-sm me-2">
+                        <i class="fas fa-expand"></i> Полный экран
+                    </button>
+                    <button id="screenshotBtn" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-camera"></i> Скриншот
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Панель индикаторов -->
+        <div class="indicators-panel">
+            <div class="row">
+                <div class="col-md-2 indicator-item">
+                    <div class="indicator-label">Цена</div>
+                    <div class="indicator-value" id="currentPrice">Загрузка...</div>
+                </div>
+                <div class="col-md-2 indicator-item">
+                    <div class="indicator-label">Изменение 24ч</div>
+                    <div class="indicator-value" id="priceChange">Загрузка...</div>
+                </div>
+                <div class="col-md-2 indicator-item">
+                    <div class="indicator-label">Объем 24ч</div>
+                    <div class="indicator-value" id="volume24h">Загрузка...</div>
+                </div>
+                <div class="col-md-2 indicator-item">
+                    <div class="indicator-label">RSI (14)</div>
+                    <div class="indicator-value" id="rsiValue">Загрузка...</div>
+                </div>
+                <div class="col-md-2 indicator-item">
+                    <div class="indicator-label">MACD</div>
+                    <div class="indicator-value" id="macdValue">Загрузка...</div>
+                </div>
+                <div class="col-md-2 indicator-item">
+                    <div class="indicator-label">BB Position</div>
+                    <div class="indicator-value" id="bbPosition">Загрузка...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной график TradingView -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <h5 class="chart-title">
+                    <i class="fas fa-chart-candlestick"></i> Основной график
+                </h5>
+                <small class="text-muted">Powered by TradingView</small>
+            </div>
+            <div class="chart-body p-0">
+                <div class="tradingview-container" id="tradingview_chart">
+                    <div class="loading-spinner">
+                        <div class="spinner-border" role="status"></div>
+                        <div class="mt-3">Загрузка графика TradingView...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Дополнительные графики -->
+        <div class="row">
+            <!-- График баланса -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-wallet"></i> Распределение баланса</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="small-chart-container">
+                            <canvas id="balanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- График позиций -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-pie"></i> Активные позиции</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="small-chart-container">
+                            <canvas id="positionsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- График цены -->
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line"></i> История цены (24ч)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="small-chart-container">
+                            <canvas id="priceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Таблица сделок -->
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-history"></i> Последние сделки</h5>
+                        <button id="refreshTradesBtn" class="btn btn-outline-light btn-sm">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div style="max-height: 350px; overflow-y: auto;">
+                            <table class="table table-dark table-sm mb-0" id="tradesTable">
+                                <thead class="sticky-top">
+                                    <tr>
+                                        <th>Время</th>
+                                        <th>Пара</th>
+                                        <th>Тип</th>
+                                        <th>Цена</th>
+                                        <th>P&L</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tradesTableBody">
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-4">
+                                            <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                            Загрузка сделок...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- График P&L -->
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-area"></i> P&L за период</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="small-chart-container">
+                            <canvas id="pnlChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Контейнер для уведомлений -->
+    <div id="notifications-container"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <!-- TradingView Library -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Инициализация будет в отдельном JS файле -->
+    <script src="{{ url_for('static', filename='js/charts_complete.js') }}"></script>
+
+    <script>
+        // Инициализация приложения при загрузке DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Инициализация приложения графиков...');
+            
+            // Проверяем доступность необходимых библиотек
+            if (typeof Chart === 'undefined') {
+                console.error('❌ Chart.js не загружен');
+                showErrorMessage('Библиотека Chart.js не загружена');
+                return;
+            }
+            
+            if (typeof TradingView === 'undefined') {
+                console.error('❌ TradingView не загружен');
+                showErrorMessage('Библиотека TradingView не загружена');
+                return;
+            }
+            
+            // Проверяем доступность основного класса
+            if (typeof CompleteChartManager !== 'undefined') {
+                // Инициализируем менеджер графиков
+                window.chartManager = new CompleteChartManager();
+                window.chartManager.init().then(() => {
+                    console.log('✅ CompleteChartManager инициализирован успешно');
+                }).catch(error => {
+                    console.error('❌ Ошибка инициализации CompleteChartManager:', error);
+                    showErrorMessage('Ошибка инициализации графиков: ' + error.message);
+                });
+            } else {
+                console.error('❌ CompleteChartManager не найден! Проверьте подключение charts_complete.js');
+                showErrorMessage('Модуль графиков не загружен. Проверьте подключение файла charts_complete.js');
+            }
+        });
+        
+        // Вспомогательная функция для показа ошибок
+        function showErrorMessage(message) {
+            const chartContainer = document.getElementById('tradingview_chart');
+            if (chartContainer) {
+                chartContainer.innerHTML = `
+                    <div class="d-flex justify-content-center align-items-center h-100">
+                        <div class="text-center text-danger">
+                            <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                            <h5>Ошибка загрузки</h5>
+                            <p>${message}</p>
+                            <button class="btn btn-outline-light" onclick="location.reload()">
+                                <i class="fas fa-refresh"></i> Перезагрузить
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
