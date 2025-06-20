@@ -1,0 +1,126 @@
+# =====================================================
+# ИСПРАВЛЕННАЯ КОНФИГУРАЦИЯ .env
+# Замените содержимое вашего .env файла на это:
+# =====================================================
+
+# ========================================
+# 🔑 API НАСТРОЙКИ BYBIT
+# ========================================
+BYBIT_API_KEY=P0PKvshbBlaJjc7p0t
+BYBIT_API_SECRET=BS0zOOEgzhLcEqr9E6h2EuWFD91FOus7nkTw
+BYBIT_TESTNET=true
+
+# ========================================
+# 🗄️ БАЗА ДАННЫХ
+# ========================================
+DB_HOST=localhost
+DB_NAME=crypto_top_bd_mysql
+DB_USER=crypto_top_admin
+DB_PASSWORD=LSM6_PqnuZ10nvEdzfe6
+DB_PORT=3306
+
+DATABASE_URL=mysql+pymysql://crypto_top_admin:LSM6_PqnuZ10nvEdzfe6@localhost:3306/crypto_top_bd_mysql
+ASYNC_DATABASE_URL=mysql+aiomysql://crypto_top_admin:LSM6_PqnuZ10nvEdzfe6@localhost:3306/crypto_top_bd_mysql
+
+# ========================================
+# 🌐 ВЕБ-ИНТЕРФЕЙС (ИСПРАВЛЕНО!)
+# ========================================
+WEB_HOST=0.0.0.0
+WEB_PORT=8000
+DEBUG_MODE=true
+RELOAD_ON_CHANGE=false
+
+# ========================================
+# 📱 TELEGRAM УВЕДОМЛЕНИЯ
+# ========================================
+TELEGRAM_BOT_TOKEN=7821491963:AAHTVSkukMjJmY-b_hD1HHJo-i4to0Cx2ks
+TELEGRAM_CHAT_ID=-4889364288
+TELEGRAM_ENABLED=true
+
+# ========================================
+# 🔐 БЕЗОПАСНОСТЬ
+# ========================================
+SECRET_KEY=4f8c3a9b7e2d5f1a8c6b9d3e7a2f5c8b9e1d4a7c3f6b9e2d5a8c1f4b7e3a6d9c
+JWT_SECRET_KEY=7d3a9f2b8e5c1a4d7f2b9e5c8a3d6f9b2e5a8c1d4f7b3e6a9d2c5f8b1e4a7d3
+JWT_ALGORITHM=HS256
+JWT_EXPIRE_MINUTES=60
+
+ADMIN_USERNAME=admin
+ADMIN_EMAIL=admin@systemetech.ru
+ADMIN_PASSWORD=SecurePassword123!
+
+# ========================================
+# 💰 ТОРГОВЫЕ ПАРАМЕТРЫ (ИСПРАВЛЕНО!)
+# ========================================
+TRADING_SYMBOL=BTCUSDT
+INITIAL_CAPITAL=1000
+POSITION_SIZE=100
+MAX_POSITION_SIZE=500
+MAX_POSITION_SIZE_PERCENT=5
+STOP_LOSS_PERCENT=2
+TAKE_PROFIT_PERCENT=4
+
+# ========================================
+# 🤖 РЕЖИМЫ РАБОТЫ (ИСПРАВЛЕНО!)
+# ========================================
+PAPER_TRADING=true
+BACKTEST_MODE=false
+LIVE_TRADING=false
+DRY_RUN=false
+
+# ========================================
+# 📈 ТОРГОВЫЕ ПАРЫ И СТРАТЕГИИ
+# ========================================
+TRADING_PAIRS=BTCUSDT,ETHUSDT,BNBUSDT
+MAX_POSITIONS=1
+MAX_CONCURRENT_TRADES=3
+
+ENABLE_MULTI_INDICATOR=true
+ENABLE_SCALPING=false
+ENABLE_MOMENTUM=true
+ENABLE_CONSERVATIVE=false
+DEFAULT_STRATEGY=multi_indicator
+
+# ========================================
+# ⚖️ РИСК-МЕНЕДЖМЕНТ
+# ========================================
+MIN_RISK_REWARD_RATIO=2.0
+MAX_DAILY_TRADES=10
+MAX_DAILY_LOSS_PERCENT=10
+MAX_DRAWDOWN_PERCENT=15
+
+# ========================================
+# 📊 ЛОГИРОВАНИЕ
+# ========================================
+LOG_LEVEL=INFO
+LOG_FILE_PATH=./logs/crypto_bot.log
+LOG_MAX_SIZE_MB=50
+LOG_BACKUP_COUNT=5
+
+# ========================================
+# 🔧 ТЕХНИЧЕСКИЕ НАСТРОЙКИ
+# ========================================
+CONNECTION_TIMEOUT=30
+READ_TIMEOUT=60
+MAX_RETRIES=3
+UPDATE_INTERVAL=60
+
+# ========================================
+# 🤖 МАШИННОЕ ОБУЧЕНИЕ (ОТКЛЮЧЕНО)
+# ========================================
+ENABLE_ML=true
+ML_MIN_TRAINING_DATA=1000
+ML_RETRAIN_HOURS=24
+
+# ========================================
+# 📰 АНАЛИЗ НОВОСТЕЙ (ОТКЛЮЧЕНО)
+# ========================================
+ENABLE_NEWS_ANALYSIS=true
+
+# ========================================
+# 🧪 РАЗРАБОТКА
+# ========================================
+DEVELOPMENT_MODE=falce
+DEBUG=false
+ENABLE_PROFILING=false
+TEST_MODE=false
