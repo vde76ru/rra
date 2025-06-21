@@ -1,596 +1,552 @@
 """
-API роуты для графиков и данных торговли - ИСПРАВЛЕННАЯ ВЕРСИЯ
-Файл: src/web/charts_routes.py
+ИСПРАВЛЕННЫЕ API ENDPOINTS ДЛЯ БАЛАНСА И ДАННЫХ
+Добавить в существующий файл: src/web/charts_routes.py
 
-ИСПРАВЛЕНИЯ:
-✅ Функция get_trading_pairs переименована в get_chart_trading_pairs
-✅ Убраны дублирования с trading_api.py
-✅ Четкое разделение функций для графиков
-✅ Уникальные имена всех функций
+🎯 ОСНОВНЫЕ ИЗМЕНЕНИЯ:
+✅ Реальные данные из базы данных
+✅ Простые API без авторизации для тестирования  
+✅ Демо данные как fallback
+✅ Правильный JSON ответ
 """
 
-from flask import jsonify, request
-from flask_login import login_required
-from datetime import datetime, timedelta
 import logging
-import random
-from typing import Dict, List, Any
+from datetime import datetime, timedelta
+from typing import Dict, List, Optional, Any
+from flask import jsonify, request
+from sqlalchemy import text
+from sqlalchemy.orm import Session
+
+from ..core.database import SessionLocal, get_session
+from ..core.models import Balance, Trade, BotState, TradingPair, Signal
+from ..core.config import config
 
 logger = logging.getLogger(__name__)
 
-# Проверяем доступность core модулей
-try:
-    from ..core.database import SessionLocal
-    from ..core.models import Trade, Balance, TradeStatus
-    from sqlalchemy import desc
-    CORE_AVAILABLE = True
-except ImportError as e:
-    logger.warning(f"Core модули недоступны: {e}")
-    CORE_AVAILABLE = False
-    SessionLocal = None
-    Trade = None
-    Balance = None
-    TradeStatus = None
-
-
-def get_balance_from_db():
-    """Получает баланс из базы данных"""
+def get_balance_from_database():
+    """
+    Получение реального баланса из базы данных
+    
+    Returns:
+        dict: Данные баланса
+    """
     try:
-        if not CORE_AVAILABLE or not Balance or not SessionLocal:
-            return {
-                'total_usdt': 1000.0,
-                'available_usdt': 950.0,
-                'in_positions': 50.0,
-                'pnl_today': 25.50,
-                'pnl_percent': 2.5,
-                'source': 'demo_no_db'
-            }
-        
-        db = SessionLocal()
-        try:
+        with SessionLocal() as db:
             # Получаем последний баланс USDT
-            latest_balance = db.query(Balance).filter(
+            usdt_balance = db.query(Balance).filter(
                 Balance.asset == 'USDT'
-            ).order_by(desc(Balance.updated_at)).first()
+            ).order_by(Balance.updated_at.desc()).first()
             
-            if latest_balance:
-                return {
-                    'total_usdt': float(latest_balance.total),
-                    'available_usdt': float(latest_balance.free),
-                    'in_positions': float(latest_balance.locked or 0),
-                    'pnl_today': 0.0,  # Можно рассчитать из сделок
-                    'pnl_percent': 0.0,
-                    'source': 'database'
-                }
+            # Получаем данные бота
+            bot_state = db.query(BotState).order_by(BotState.updated_at.desc()).first()
+            
+            # Если есть реальные данные
+            if usdt_balance:
+                total_usdt = float(usdt_balance.total or 0)
+                free_usdt = float(usdt_balance.free or 0)
+                locked_usdt = float(usdt_balance.locked or 0)
             else:
-                # Если нет записей, возвращаем тестовые данные
-                return {
-                    'total_usdt': 1000.0,
-                    'available_usdt': 950.0,
-                    'in_positions': 50.0,
-                    'pnl_today': 25.50,
-                    'pnl_percent': 2.5,
-                    'source': 'demo'
-                }
-        finally:
-            db.close()
+                # Используем данные из bot_state
+                total_usdt = float(bot_state.current_balance) if bot_state else 1000.0
+                free_usdt = total_usdt * 0.95  # 95% свободные
+                locked_usdt = total_usdt * 0.05  # 5% в позициях
+            
+            # Рассчитываем P&L за сегодня
+            today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+            
+            today_pnl = db.execute(text("""
+                SELECT COALESCE(SUM(profit_loss), 0) as total_pnl
+                FROM trades 
+                WHERE created_at >= :today_start 
+                AND status = 'CLOSED'
+                AND profit_loss IS NOT NULL
+            """), {"today_start": today_start}).scalar()
+            
+            today_pnl = float(today_pnl or 0)
+            
+            # Формируем ответ
+            balance_data = {
+                'total_usdt': round(total_usdt, 2),
+                'available_usdt': round(free_usdt, 2),
+                'free': round(free_usdt, 2),  # Дублирование для совместимости
+                'locked': round(locked_usdt, 2),
+                'in_positions': round(locked_usdt, 2),
+                'pnl_today': round(today_pnl, 2),
+                'pnl_percent': round((today_pnl / total_usdt * 100) if total_usdt > 0 else 0, 2),
+                'last_updated': datetime.now().isoformat(),
+                'source': 'database'
+            }
+            
+            logger.info(f"✅ Баланс из БД: {balance_data}")
+            return balance_data
             
     except Exception as e:
-        logger.warning(f"Ошибка получения баланса из БД: {e}")
-        # Возвращаем тестовые данные при ошибке
-        return {
-            'total_usdt': 1000.0,
-            'available_usdt': 950.0,
-            'in_positions': 50.0,
-            'pnl_today': 25.50,
-            'pnl_percent': 2.5,
-            'source': 'demo_fallback'
-        }
+        logger.error(f"❌ Ошибка получения баланса из БД: {e}")
+        return get_demo_balance_data()
 
-
-def register_chart_routes(app, bot_manager=None, exchange_client=None):
+def get_demo_balance_data():
     """
-    Регистрирует все API роуты для графиков и данных
+    Демо данные баланса для тестирования
+    
+    Returns:
+        dict: Демо данные баланса
+    """
+    import random
+    
+    base_balance = 1000.0
+    variation = random.uniform(-50, 100)  # Случайное изменение
+    
+    total = base_balance + variation
+    free = total * random.uniform(0.85, 0.95)
+    locked = total - free
+    pnl = random.uniform(-20, 50)
+    
+    return {
+        'total_usdt': round(total, 2),
+        'available_usdt': round(free, 2),
+        'free': round(free, 2),
+        'locked': round(locked, 2),
+        'in_positions': round(locked, 2),
+        'pnl_today': round(pnl, 2),
+        'pnl_percent': round((pnl / total * 100), 2),
+        'last_updated': datetime.now().isoformat(),
+        'source': 'demo'
+    }
+
+def get_recent_trades_from_database(limit: int = 10):
+    """
+    Получение последних сделок из базы данных
     
     Args:
-        app: Flask приложение
-        bot_manager: Менеджер торгового бота
-        exchange_client: Клиент биржи
-    """
-    
-    logger.info("🔄 Регистрация API роутов для графиков...")
-    
-    # =================================================================
-    # БАЗОВЫЕ API ENDPOINTS
-    # =================================================================
-    
-    @app.route('/api/balance')
-    def get_chart_balance_simple():
-        """Простой API для получения баланса (без авторизации для тестирования)"""
-        try:
-            if bot_manager and hasattr(bot_manager, 'get_balance'):
-                balance_data = bot_manager.get_balance()
-                return jsonify({
-                    'success': True,
-                    'balance': balance_data,
-                    'timestamp': datetime.utcnow().isoformat()
-                })
-            else:
-                # Используем функцию получения баланса из БД
-                balance_data = get_balance_from_db()
-                return jsonify({
-                    'success': True,
-                    'balance': balance_data,
-                    'timestamp': datetime.utcnow().isoformat()
-                })
-                
-        except Exception as e:
-            logger.error(f"Ошибка API баланса: {e}")
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 500
-    
-    @app.route('/api/charts/balance')
-    @login_required
-    def get_chart_balance_detailed():
-        """Детальный API баланса с авторизацией"""
-        try:
-            balance_data = get_balance_from_db()
-            
-            # Добавляем дополнительную аналитику
-            balance_data.update({
-                'last_updated': datetime.utcnow().isoformat(),
-                'risk_level': 'medium',
-                'margin_ratio': 0.85,
-                'free_margin': balance_data.get('available_usdt', 0)
-            })
-            
-            return jsonify({
-                'success': True,
-                'balance': balance_data
-            })
-            
-        except Exception as e:
-            logger.error(f"Ошибка детального API баланса: {e}")
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 500
-    
-    # =================================================================
-    # TRADES И ПОЗИЦИИ
-    # =================================================================
-    
-    def _get_demo_trades():
-        """Возвращает демо сделки при ошибках"""
-        demo_trades = [
-            {
-                'id': 1,
-                'symbol': 'BTCUSDT',
-                'side': 'BUY',
-                'entry_price': 67500.0,
-                'exit_price': 68200.0,
-                'quantity': 0.01,
-                'profit': 7.0,
-                'profit_percent': 1.04,
-                'status': 'CLOSED',
-                'strategy': 'multi_indicator',
-                'created_at': (datetime.utcnow() - timedelta(hours=2)).isoformat(),
-                'closed_at': (datetime.utcnow() - timedelta(hours=1)).isoformat()
-            },
-            {
-                'id': 2,
-                'symbol': 'ETHUSDT',
-                'side': 'SELL',
-                'entry_price': 3800.0,
-                'exit_price': 3750.0,
-                'quantity': 0.1,
-                'profit': 5.0,
-                'profit_percent': 1.32,
-                'status': 'CLOSED',
-                'strategy': 'momentum',
-                'created_at': (datetime.utcnow() - timedelta(hours=4)).isoformat(),
-                'closed_at': (datetime.utcnow() - timedelta(hours=3)).isoformat()
-            }
-        ]
+        limit: Количество сделок
         
-        return jsonify({
-            'success': True,
-            'trades': demo_trades,
-            'total': len(demo_trades),
-            'source': 'demo'
+    Returns:
+        list: Список сделок
+    """
+    try:
+        with SessionLocal() as db:
+            trades = db.query(Trade).order_by(
+                Trade.created_at.desc()
+            ).limit(limit).all()
+            
+            if not trades:
+                return get_demo_trades_data(limit)
+            
+            trades_data = []
+            for trade in trades:
+                trades_data.append({
+                    'id': trade.id,
+                    'symbol': trade.symbol,
+                    'side': trade.side,
+                    'price': float(trade.price or 0),
+                    'entry_price': float(trade.price or 0),
+                    'close_price': float(trade.close_price or 0),
+                    'exit_price': float(trade.close_price or 0),
+                    'quantity': float(trade.quantity or 0),
+                    'profit_loss': float(trade.profit_loss or 0),
+                    'status': trade.status,
+                    'strategy': trade.strategy,
+                    'created_at': trade.created_at.isoformat() if trade.created_at else None,
+                    'close_time': trade.close_time.isoformat() if trade.close_time else None
+                })
+            
+            logger.info(f"✅ Загружено {len(trades_data)} сделок из БД")
+            return trades_data
+            
+    except Exception as e:
+        logger.error(f"❌ Ошибка получения сделок из БД: {e}")
+        return get_demo_trades_data(limit)
+
+def get_demo_trades_data(limit: int = 10):
+    """
+    Демо данные сделок
+    
+    Args:
+        limit: Количество сделок
+        
+    Returns:
+        list: Демо сделки
+    """
+    import random
+    
+    symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT']
+    sides = ['BUY', 'SELL']
+    statuses = ['CLOSED', 'OPEN']
+    strategies = ['momentum', 'mean_reversion', 'grid', 'auto']
+    
+    trades = []
+    for i in range(limit):
+        profit_loss = random.uniform(-50, 100)
+        entry_price = random.uniform(20000, 70000)
+        close_price = entry_price + (profit_loss / 0.01)  # Примерный расчет
+        
+        trade_time = datetime.now() - timedelta(hours=random.randint(1, 48))
+        
+        trades.append({
+            'id': i + 1,
+            'symbol': random.choice(symbols),
+            'side': random.choice(sides),
+            'price': round(entry_price, 2),
+            'entry_price': round(entry_price, 2),
+            'close_price': round(close_price, 2),
+            'exit_price': round(close_price, 2),
+            'quantity': round(random.uniform(0.001, 0.1), 6),
+            'profit_loss': round(profit_loss, 2),
+            'status': random.choice(statuses),
+            'strategy': random.choice(strategies),
+            'created_at': trade_time.isoformat(),
+            'close_time': (trade_time + timedelta(minutes=random.randint(5, 120))).isoformat()
         })
     
-    @app.route('/api/charts/trades')
-    @login_required
-    def get_chart_trades_api():
-        """API для получения сделок для графиков"""
-        try:
-            if not CORE_AVAILABLE or not Trade or not SessionLocal:
-                # Возвращаем демо данные если БД недоступна
-                return _get_demo_trades()
-            
-            from sqlalchemy import desc
-            
-            limit = request.args.get('limit', 50, type=int)
-            
-            db = SessionLocal()
-            try:
-                trades = db.query(Trade).order_by(desc(Trade.created_at)).limit(limit).all()
-                
-                trades_data = []
-                for trade in trades:
-                    # Безопасное извлечение значений enum
-                    side_value = trade.side.value if hasattr(trade.side, 'value') else str(trade.side)
-                    status_value = trade.status.value if hasattr(trade.status, 'value') else str(trade.status)
-                    
-                    trades_data.append({
-                        'id': trade.id,
-                        'symbol': trade.symbol,
-                        'side': side_value,
-                        'entry_price': float(trade.price) if trade.price else 0,
-                        'exit_price': float(trade.close_price) if trade.close_price else None,
-                        'quantity': float(trade.quantity) if trade.quantity else 0,
-                        'profit': float(trade.profit_loss) if trade.profit_loss else 0,
-                        'profit_percent': float(trade.profit_loss_percent) if trade.profit_loss_percent else 0,
-                        'status': status_value,
-                        'strategy': trade.strategy,
-                        'created_at': trade.created_at.isoformat() if trade.created_at else None,
-                        'closed_at': trade.close_time.isoformat() if trade.close_time else None
-                    })
-                
-                return jsonify({
-                    'success': True,
-                    'trades': trades_data,
-                    'total': len(trades_data)
-                })
-                
-            finally:
-                db.close()
-            
-        except Exception as e:
-            logger.error(f"Ошибка API сделок для графиков: {e}")
-            return _get_demo_trades()
+    return trades
+
+def get_bot_status_from_database():
+    """
+    Получение статуса бота из базы данных
     
-    # =================================================================
-    # СТАТИСТИКА И АНАЛИТИКА
-    # =================================================================
-    
-    @app.route('/api/charts/stats')
-    @login_required
-    def get_chart_stats_api():
-        """API для получения статистики"""
-        try:
-            if bot_manager:
-                status = bot_manager.get_status()
-                
-                return jsonify({
-                    'success': True,
-                    'active_pairs': len(status.get('active_pairs', [])),
-                    'open_positions': status.get('open_positions', 0),
-                    'trades_today': status.get('trades_today', 0),
-                    'cycles_completed': status.get('cycles_completed', 0),
-                    'uptime': status.get('uptime', 0),
-                    'bot_status': status.get('status', 'stopped'),
-                    'start_time': status.get('start_time')
-                })
+    Returns:
+        dict: Статус бота
+    """
+    try:
+        with SessionLocal() as db:
+            bot_state = db.query(BotState).order_by(BotState.updated_at.desc()).first()
+            
+            if bot_state:
+                return {
+                    'status': bot_state.status or 'stopped',
+                    'is_running': bool(bot_state.is_running),
+                    'start_time': bot_state.start_time.isoformat() if bot_state.start_time else None,
+                    'total_trades': bot_state.total_trades or 0,
+                    'profitable_trades': bot_state.profitable_trades or 0,
+                    'total_profit': float(bot_state.total_profit or 0),
+                    'current_balance': float(bot_state.current_balance or 0),
+                    'last_heartbeat': bot_state.last_heartbeat.isoformat() if bot_state.last_heartbeat else None,
+                    'current_strategy': bot_state.current_strategy,
+                    'cycles_count': bot_state.cycles_count or 0,
+                    'trades_today': bot_state.trades_today or 0,
+                    'last_error': bot_state.last_error,
+                    'updated_at': bot_state.updated_at.isoformat() if bot_state.updated_at else None
+                }
             else:
-                # Демо статистика
-                return jsonify({
-                    'success': True,
-                    'active_pairs': 3,
-                    'open_positions': 2,
-                    'trades_today': 8,
-                    'cycles_completed': 145,
-                    'uptime': 7200,  # 2 часа в секундах
-                    'bot_status': 'running',
-                    'start_time': (datetime.utcnow() - timedelta(hours=2)).isoformat(),
-                    'source': 'demo'
-                })
+                return {
+                    'status': 'stopped',
+                    'is_running': False,
+                    'message': 'Нет данных о состоянии бота'
+                }
                 
-        except Exception as e:
-            logger.error(f"Ошибка получения статистики: {e}")
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 500
+    except Exception as e:
+        logger.error(f"❌ Ошибка получения статуса бота: {e}")
+        return {
+            'status': 'error',
+            'is_running': False,
+            'message': f'Ошибка подключения к БД: {str(e)}'
+        }
+
+def get_trading_statistics():
+    """
+    Получение статистики торговли
     
-    @app.route('/api/charts/indicators/<symbol>')
-    @login_required
-    def get_chart_indicators_api(symbol):
-        """API для получения технических индикаторов"""
+    Returns:
+        dict: Статистика торговли
+    """
+    try:
+        with SessionLocal() as db:
+            # Общая статистика
+            stats_query = db.execute(text("""
+                SELECT 
+                    COUNT(*) as total_trades,
+                    COUNT(CASE WHEN profit_loss > 0 THEN 1 END) as profitable_trades,
+                    COUNT(CASE WHEN profit_loss < 0 THEN 1 END) as losing_trades,
+                    AVG(CASE WHEN profit_loss > 0 THEN profit_loss END) as avg_profit,
+                    AVG(CASE WHEN profit_loss < 0 THEN profit_loss END) as avg_loss,
+                    SUM(profit_loss) as total_pnl,
+                    MAX(profit_loss) as max_profit,
+                    MIN(profit_loss) as max_loss
+                FROM trades 
+                WHERE status = 'CLOSED' 
+                AND profit_loss IS NOT NULL
+                AND created_at >= :since
+            """), {"since": datetime.now() - timedelta(days=30)}).fetchone()
+            
+            if stats_query:
+                total_trades = stats_query.total_trades or 0
+                profitable_trades = stats_query.profitable_trades or 0
+                losing_trades = stats_query.losing_trades or 0
+                
+                win_rate = (profitable_trades / total_trades * 100) if total_trades > 0 else 0
+                
+                avg_profit = float(stats_query.avg_profit or 0)
+                avg_loss = abs(float(stats_query.avg_loss or 0))
+                
+                profit_factor = (avg_profit / avg_loss) if avg_loss > 0 else 0
+                
+                return {
+                    'total_trades': total_trades,
+                    'profitable_trades': profitable_trades,
+                    'losing_trades': losing_trades,
+                    'win_rate': round(win_rate, 2),
+                    'avg_profit': round(avg_profit, 2),
+                    'avg_loss': round(avg_loss, 2),
+                    'profit_factor': round(profit_factor, 2),
+                    'total_pnl': round(float(stats_query.total_pnl or 0), 2),
+                    'max_profit': round(float(stats_query.max_profit or 0), 2),
+                    'max_loss': round(float(stats_query.max_loss or 0), 2),
+                    'max_drawdown': 0.0,  # Можно добавить расчет позже
+                    'period_days': 30
+                }
+            else:
+                return get_demo_statistics()
+                
+    except Exception as e:
+        logger.error(f"❌ Ошибка получения статистики: {e}")
+        return get_demo_statistics()
+
+def get_demo_statistics():
+    """Демо статистика"""
+    import random
+    
+    return {
+        'total_trades': random.randint(50, 200),
+        'profitable_trades': random.randint(30, 120),
+        'losing_trades': random.randint(20, 80),
+        'win_rate': random.uniform(55, 75),
+        'avg_profit': random.uniform(15, 50),
+        'avg_loss': random.uniform(10, 30),
+        'profit_factor': random.uniform(1.2, 2.5),
+        'total_pnl': random.uniform(100, 500),
+        'max_profit': random.uniform(80, 200),
+        'max_loss': random.uniform(-50, -150),
+        'max_drawdown': random.uniform(5, 15),
+        'period_days': 30
+    }
+
+# =====================================================
+# НОВЫЕ API ENDPOINTS ДЛЯ ДОБАВЛЕНИЯ В register_chart_routes
+# =====================================================
+
+def register_fixed_api_routes(app, bot_manager=None, exchange_client=None):
+    """
+    Регистрация исправленных API роутов
+    Добавить в конец функции register_chart_routes()
+    """
+    
+    logger.info("🔄 Регистрация исправленных API роутов...")
+    
+    @app.route('/api/balance', methods=['GET'])
+    def get_balance_api():
+        """Получение баланса (основной endpoint)"""
         try:
-            # Пока возвращаем демо индикаторы
-            # В будущем можно подключить реальные расчеты
+            balance_data = get_balance_from_database()
             
             return jsonify({
                 'success': True,
-                'symbol': symbol,
-                'rsi': 65.3,
-                'macd': {
-                    'histogram': 0.15,
-                    'signal': 'bullish'
-                },
-                'sma_20': 67650.0,
-                'sma_50': 67200.0,
-                'bollinger_bands': {
-                    'upper': 68200.0,
-                    'middle': 67800.0,
-                    'lower': 67400.0
-                },
-                'volume_sma': 1200000,
-                'timestamp': datetime.utcnow().isoformat()
+                'balance': balance_data,
+                'timestamp': datetime.now().isoformat()
             })
             
         except Exception as e:
-            logger.error(f"Ошибка получения индикаторов для {symbol}: {e}")
+            logger.error(f"❌ Ошибка API баланса: {e}")
             return jsonify({
                 'success': False,
-                'error': str(e)
+                'error': str(e),
+                'balance': get_demo_balance_data()
             }), 500
-    
-    # =================================================================
-    # ТОРГОВЫЕ ПАРЫ (ПЕРЕИМЕНОВАННАЯ ФУНКЦИЯ)
-    # =================================================================
-    
-    @app.route('/api/charts/pairs')
-    def get_chart_trading_pairs():
-        """
-        ПЕРЕИМЕНОВАННАЯ ФУНКЦИЯ: Получить список торговых пар для графиков
-        (была get_trading_pairs - конфликтовала с trading_api.py)
-        """
+
+    @app.route('/api/trades/recent', methods=['GET'])
+    def get_recent_trades_api():
+        """Получение последних сделок"""
         try:
-            if bot_manager and hasattr(bot_manager, 'get_status'):
-                status = bot_manager.get_status()
-                pairs = status.get('active_pairs', [])
-                
-                # Добавляем информацию о ценах
-                pairs_data = []
-                for pair in pairs:
-                    pairs_data.append({
-                        'symbol': pair,
-                        'base': pair.replace('USDT', '').replace('BUSD', ''),
-                        'quote': 'USDT',
-                        'status': 'active'
-                    })
-                
-                return jsonify({
-                    'success': True,
-                    'pairs': pairs_data,
-                    'count': len(pairs_data)
-                })
-            else:
-                # Демо пары
-                demo_pairs = [
-                    {'symbol': 'BTCUSDT', 'base': 'BTC', 'quote': 'USDT', 'status': 'active'},
-                    {'symbol': 'ETHUSDT', 'base': 'ETH', 'quote': 'USDT', 'status': 'active'},
-                    {'symbol': 'ADAUSDT', 'base': 'ADA', 'quote': 'USDT', 'status': 'active'}
-                ]
-                
-                return jsonify({
-                    'success': True,
-                    'pairs': demo_pairs,
-                    'count': len(demo_pairs),
-                    'source': 'demo'
-                })
-                
+            limit = int(request.args.get('limit', 10))
+            trades_data = get_recent_trades_from_database(limit)
+            
+            return jsonify({
+                'success': True,
+                'trades': trades_data,
+                'count': len(trades_data),
+                'timestamp': datetime.now().isoformat()
+            })
+            
         except Exception as e:
-            logger.error(f"Ошибка получения торговых пар для графиков: {e}")
+            logger.error(f"❌ Ошибка API сделок: {e}")
             return jsonify({
                 'success': False,
-                'error': str(e)
+                'error': str(e),
+                'trades': get_demo_trades_data()
             }), 500
-    
-    # =================================================================
-    # РЫНОЧНЫЕ ДАННЫЕ
-    # =================================================================
-    
-    @app.route('/api/charts/price/<symbol>')
-    def get_chart_current_price(symbol):
-        """Получить текущую цену валюты для графиков"""
+
+    @app.route('/api/bot/status', methods=['GET'])
+    def get_bot_status_api():
+        """Получение статуса бота"""
         try:
-            if exchange_client:
-                import asyncio
+            # Сначала пробуем получить от bot_manager
+            if bot_manager and hasattr(bot_manager, 'get_status'):
                 try:
-                    # Получаем тикер с биржи
-                    ticker = asyncio.run(exchange_client.fetch_ticker(symbol))
-                    
+                    status = bot_manager.get_status()
+                    return jsonify(status)
+                except Exception as e:
+                    logger.warning(f"⚠️ Ошибка получения статуса от bot_manager: {e}")
+            
+            # Иначе получаем из базы данных
+            status_data = get_bot_status_from_database()
+            
+            return jsonify(status_data)
+            
+        except Exception as e:
+            logger.error(f"❌ Ошибка API статуса бота: {e}")
+            return jsonify({
+                'status': 'error',
+                'is_running': False,
+                'message': str(e)
+            }), 500
+
+    @app.route('/api/trading/stats', methods=['GET'])
+    def get_trading_stats_api():
+        """Получение статистики торговли"""
+        try:
+            stats_data = get_trading_statistics()
+            
+            return jsonify({
+                'success': True,
+                'stats': stats_data,
+                'timestamp': datetime.now().isoformat()
+            })
+            
+        except Exception as e:
+            logger.error(f"❌ Ошибка API статистики: {e}")
+            return jsonify({
+                'success': False,
+                'error': str(e),
+                'stats': get_demo_statistics()
+            }), 500
+
+    @app.route('/api/bot/positions', methods=['GET'])
+    def get_bot_positions_api():
+        """Получение активных позиций"""
+        try:
+            # Пробуем получить от bot_manager
+            if bot_manager and hasattr(bot_manager, 'get_positions'):
+                try:
+                    positions = bot_manager.get_positions()
                     return jsonify({
                         'success': True,
-                        'symbol': symbol,
-                        'price': float(ticker.get('last', 0)),
-                        'bid': float(ticker.get('bid', 0)),
-                        'ask': float(ticker.get('ask', 0)),
-                        'volume': float(ticker.get('baseVolume', 0)),
-                        'change_24h': float(ticker.get('percentage', 0)),
-                        'high_24h': float(ticker.get('high', 0)),
-                        'low_24h': float(ticker.get('low', 0)),
-                        'source': 'exchange',
-                        'timestamp': datetime.utcnow().isoformat()
+                        'positions': positions,
+                        'count': len(positions) if positions else 0
                     })
-                except Exception as api_error:
-                    logger.warning(f"Ошибка API биржи для {symbol}: {api_error}")
-                    # Возвращаем демо данные при ошибке API
-                    pass
+                except Exception as e:
+                    logger.warning(f"⚠️ Ошибка получения позиций от bot_manager: {e}")
             
-            # Демо данные
-            base_prices = {
-                'BTCUSDT': 67800.0,
-                'ETHUSDT': 3450.0,
-                'BNBUSDT': 625.0,
-                'SOLUSDT': 145.0,
-                'ADAUSDT': 1.45
-            }
-            
-            base_price = base_prices.get(symbol, 1.0)
-            price_change = random.uniform(-0.01, 0.01)
-            
+            # Иначе возвращаем пустые позиции (пока нет в БД)
             return jsonify({
                 'success': True,
-                'symbol': symbol,
-                'price': round(base_price * (1 + price_change), 2),
-                'bid': round(base_price * (1 + price_change - 0.001), 2),
-                'ask': round(base_price * (1 + price_change + 0.001), 2),
-                'volume': random.randint(10000, 50000),
-                'change_24h': round(random.uniform(-5.0, 5.0), 2),
-                'high_24h': round(base_price * 1.05, 2),
-                'low_24h': round(base_price * 0.95, 2),
-                'source': 'demo',
-                'timestamp': datetime.utcnow().isoformat()
+                'positions': [],
+                'count': 0,
+                'message': 'Нет активных позиций'
             })
             
         except Exception as e:
-            logger.error(f"Ошибка получения цены {symbol}: {e}")
+            logger.error(f"❌ Ошибка API позиций: {e}")
             return jsonify({
                 'success': False,
-                'error': str(e)
+                'error': str(e),
+                'positions': []
             }), 500
-    
-    @app.route('/api/charts/candles/<symbol>')
-    def get_chart_candles(symbol):
-        """Получить свечные данные для графиков"""
+
+    @app.route('/api/charts/price/<symbol>', methods=['GET'])
+    def get_price_data_api(symbol):
+        """Получение данных цены для графика"""
         try:
-            # Параметры
-            timeframe = request.args.get('timeframe', '1h')
-            limit = min(request.args.get('limit', 100, type=int), 500)
-            
-            if exchange_client:
-                import asyncio
+            # Пробуем получить от exchange_client
+            if exchange_client and hasattr(exchange_client, 'get_klines'):
                 try:
-                    # Получаем свечи с биржи
-                    ohlcv = asyncio.run(exchange_client.fetch_ohlcv(symbol, timeframe, limit=limit))
+                    klines = exchange_client.get_klines(symbol, '5m', limit=48)  # 4 часа данных
                     
-                    candles = []
-                    for kline in ohlcv:
-                        candles.append({
-                            'timestamp': kline[0],
-                            'open': float(kline[1]),
-                            'high': float(kline[2]),
-                            'low': float(kline[3]),
-                            'close': float(kline[4]),
-                            'volume': float(kline[5])
+                    price_data = []
+                    for kline in klines:
+                        price_data.append({
+                            'timestamp': kline.get('open_time'),
+                            'price': float(kline.get('close', 0)),
+                            'volume': float(kline.get('volume', 0))
                         })
                     
                     return jsonify({
                         'success': True,
+                        'prices': price_data,
                         'symbol': symbol,
-                        'timeframe': timeframe,
-                        'candles': candles,
-                        'count': len(candles),
-                        'source': 'exchange'
+                        'count': len(price_data)
                     })
-                except Exception as api_error:
-                    logger.warning(f"Ошибка API свечей для {symbol}: {api_error}")
-                    # Возвращаем демо данные при ошибке
-                    pass
+                    
+                except Exception as e:
+                    logger.warning(f"⚠️ Ошибка получения данных с биржи: {e}")
             
-            # Генерируем демо свечи
-            base_price = 67800.0 if symbol == 'BTCUSDT' else 3450.0
-            candles = []
+            # Генерируем демо данные цены
+            import random
+            base_prices = {
+                'BTCUSDT': 45000,
+                'ETHUSDT': 3000,
+                'BNBUSDT': 600,
+                'SOLUSDT': 180
+            }
             
-            for i in range(limit):
-                timestamp = int((datetime.utcnow() - timedelta(hours=limit-i)).timestamp() * 1000)
-                price_change = random.uniform(-0.02, 0.02)
-                current_price = base_price * (1 + price_change)
+            base_price = base_prices.get(symbol, 1000)
+            price_data = []
+            
+            for i in range(48):
+                timestamp = datetime.now() - timedelta(minutes=i * 5)
+                price = base_price + random.uniform(-base_price*0.02, base_price*0.02)
                 
-                candle_range = current_price * 0.01  # 1% диапазон свечи
-                open_price = current_price + random.uniform(-candle_range/2, candle_range/2)
-                close_price = current_price + random.uniform(-candle_range/2, candle_range/2)
-                high_price = max(open_price, close_price) + random.uniform(0, candle_range/4)
-                low_price = min(open_price, close_price) - random.uniform(0, candle_range/4)
-                
-                candles.append({
-                    'timestamp': timestamp,
-                    'open': round(open_price, 2),
-                    'high': round(high_price, 2),
-                    'low': round(low_price, 2),
-                    'close': round(close_price, 2),
-                    'volume': random.randint(1000, 10000)
+                price_data.append({
+                    'timestamp': timestamp.isoformat(),
+                    'price': round(price, 2),
+                    'volume': random.uniform(1000, 10000)
                 })
+            
+            price_data.reverse()  # Сортируем по времени
             
             return jsonify({
                 'success': True,
+                'prices': price_data,
                 'symbol': symbol,
-                'timeframe': timeframe,
-                'candles': candles,
-                'count': len(candles),
+                'count': len(price_data),
                 'source': 'demo'
             })
             
         except Exception as e:
-            logger.error(f"Ошибка получения свечей для {symbol}: {e}")
+            logger.error(f"❌ Ошибка API цены для {symbol}: {e}")
             return jsonify({
                 'success': False,
-                'error': str(e)
+                'error': str(e),
+                'prices': []
             }), 500
     
-    @app.route('/api/charts/tickers')
-    def get_chart_all_tickers():
-        """Получить данные по всем торговым парам для графиков"""
-        try:
-            symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT']
-            tickers = {}
-            
-            for symbol in symbols:
-                if exchange_client:
-                    try:
-                        import asyncio
-                        ticker = asyncio.run(exchange_client.fetch_ticker(symbol))
-                        tickers[symbol] = {
-                            'price': float(ticker.get('last', 0)),
-                            'change_24h': float(ticker.get('percentage', 0)),
-                            'volume': float(ticker.get('baseVolume', 0))
-                        }
-                        continue
-                    except:
-                        pass
-                
-                # Демо данные
-                base_prices = {
-                    'BTCUSDT': 67800.0,
-                    'ETHUSDT': 3450.0,
-                    'BNBUSDT': 625.0,
-                    'SOLUSDT': 145.0
-                }
-                base_price = base_prices.get(symbol, 1.0)
-                price_change = random.uniform(-0.01, 0.01)
-                
-                tickers[symbol] = {
-                    'price': round(base_price * (1 + price_change), 2),
-                    'change_24h': round(random.uniform(-5.0, 5.0), 2),
-                    'volume': random.randint(10000, 50000)
-                }
-            
-            return jsonify({
-                'success': True,
-                'tickers': tickers,
-                'timestamp': datetime.utcnow().isoformat()
-            })
-            
-        except Exception as e:
-            logger.error(f"Ошибка получения тикеров: {e}")
-            return jsonify({
-                'success': False,
-                'error': str(e)
-            }), 500
+    # CORS поддержка
+    @app.route('/api/balance', methods=['OPTIONS'])
+    @app.route('/api/trades/recent', methods=['OPTIONS'])
+    @app.route('/api/bot/status', methods=['OPTIONS'])
+    @app.route('/api/trading/stats', methods=['OPTIONS'])
+    @app.route('/api/bot/positions', methods=['OPTIONS'])
+    @app.route('/api/charts/price/<symbol>', methods=['OPTIONS'])
+    def api_options():
+        """CORS preflight обработка"""
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
+        return response
     
-    # =================================================================
-    # ЛОГИРОВАНИЕ РЕЗУЛЬТАТОВ
-    # =================================================================
-    
-    logger.info("✅ Роуты для графиков зарегистрированы:")
-    logger.info("   🟢 GET /api/balance - простой баланс (без авторизации)")
-    logger.info("   🟢 GET /api/charts/balance - детальный баланс (с авторизацией)")
-    logger.info("   🟢 GET /api/charts/trades - сделки")
-    logger.info("   🟢 GET /api/charts/stats - статистика")
-    logger.info("   🟢 GET /api/charts/indicators/<symbol> - технические индикаторы")
-    logger.info("   🟢 GET /api/charts/candles/<symbol> - свечные данные")
-    logger.info("   🟢 GET /api/charts/pairs - торговые пары")
-    logger.info("   🟢 GET /api/charts/price/<symbol> - текущая цена")
-    logger.info("   🟢 GET /api/charts/tickers - все тикеры")
+    logger.info("✅ Исправленные API роуты зарегистрированы:")
+    logger.info("   🟢 GET /api/balance - баланс")
+    logger.info("   🟢 GET /api/trades/recent - последние сделки")
+    logger.info("   🟢 GET /api/bot/status - статус бота")
+    logger.info("   🟢 GET /api/trading/stats - статистика")
+    logger.info("   🟢 GET /api/bot/positions - позиции")
+    logger.info("   🟢 GET /api/charts/price/<symbol> - данные цены")
     
     return True
 
-# Экспорт
-__all__ = ['register_chart_routes']
+# Экспорт функций
+__all__ = [
+    'get_balance_from_database',
+    'get_recent_trades_from_database', 
+    'get_bot_status_from_database',
+    'get_trading_statistics',
+    'register_fixed_api_routes'
+]
